@@ -1,0 +1,24 @@
+OBJETIVO, MOSTRAR UN EJEMPLO DE UN ARCHIVO PERSISCENCE.XML NECESARIO PARA EL FUNCIONAMIENTO DE JPA, REQUIERE ESTAR EN LA CARPETA META-INF DENTRO DE LA CARPETA SRC DEL PROYECTO.
+ACLARACION, EXISTEN MUCHAS PROPIEDADES UTILES QUE SE LE PUEDEN AGREGAR EN: https://www.eclipse.org/eclipselink/documentation/2.6/jpa/extensions/persistenceproperties_ref.htm
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+             http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+
+  <persistence-unit name="aplicacion">
+    <properties>
+        <class>modelo.Factura</class> 
+        <!-- Agregar aca todas las clases anotadas con @Entity -->
+        <!-- Sin estas lineas no anda si el .jar no esta en la carpeta "BIN" del proyecto. -->
+        <property name="javax.persistence.jdbc.driver" value="org.firebirdsql.jdbc.FBDriver" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql://localhost:3050//firebird/data/TP1.fdb?charSet=utf-8" />
+        <property name="javax.persistence.jdbc.user" value="SYSDBA" />
+        <property name="javax.persistence.jdbc.password" value="masterkey" />
+        <property name="eclipselink.logging.level" value="ALL"/> 
+        <!-- Con esta liena EclipseLink muestra informacion para poder debugear -->
+    </properties>
+  </persistence-unit>
+
+</persistence>

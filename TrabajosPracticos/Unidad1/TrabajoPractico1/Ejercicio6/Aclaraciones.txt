@@ -1,0 +1,5 @@
+Aclaraciones:
+Los select procedure y execute procedure estan identificados como: SP_[SELECT/EXECUTE]_PROCEDURE_[NUMERO DE EJERCICIO]
+
+Ejercicio 3.2 no agregué los campos PRECIO_BASE y PRECIO_COSTO porque la consigna no lo especificaba, pero en una implementacion real, debería hacerlo.
+Ejercicio 3.3 se deben insertar facturas con la Fecha_Desde mayor o igual que la mayor fecha ingresada hasta el momento, para cumplir con el constraint 1.5.

@@ -1,0 +1,37 @@
+SET TERM ^ ;
+CREATE PROCEDURE REPLICAR_TABLA_PERSONA
+RETURNS
+(
+   DNI INTEGER,
+   NOMBRE VARCHAR(20)
+)
+AS
+   DECLARE COMANDO VARCHAR(512);
+BEGIN
+   FOR 
+      SELECT DNI,NOMBRE FROM PERSONA
+   INTO :DNI,:NOMBRE
+   DO BEGIN
+   COMANDO = 'INSERT INTO PERSONA(DNI,NOMBRE) VALUES(' || :DNI
+                                                       || ','
+                                                       || '''' || :NOMBRE || ''''
+                                                       || ');';
+   EXECUTE STATEMENT :COMANDO WITH COMMON TRANSACTION
+   ON EXTERNAL '192.168.0.29/3050:/var/lib/firebird/2.5/data/dbDebian1.fdb'
+   AS USER 'SYSDBA' PASSWORD 'masterkey';
+   SUSPEND;
+   END
+END^
+SET TERM ; ^
+
+SELECT * FROM PERSONA;
+
+INSERT INTO PERSONA(DNI,NOMBRE) VALUES (1,'A');
+
+INSERT INTO PERSONA(DNI,NOMBRE) VALUES (2,'B');
+
+INSERT INTO PERSONA(DNI,NOMBRE) VALUES (3,'C');
+
+INSERT INTO PERSONA(DNI,NOMBRE) VALUES (4,'D');
+
+SELECT * FROM REPLICAR_TABLA_PERSONA;
