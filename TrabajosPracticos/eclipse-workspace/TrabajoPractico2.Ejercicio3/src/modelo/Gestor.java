@@ -31,7 +31,6 @@ public class Gestor {
 	}
 	
 	/* OPERACIONES CON FACTURA */
-	
 	@SuppressWarnings("unchecked")
 	public List<Factura> selectAllFromFactura(){
 		EntityManager em = emf.createEntityManager();
@@ -40,25 +39,24 @@ public class Gestor {
 		return facturas;
 	}
 	
-	public Factura selectFacturaWhere(int nro) {
+	public Factura selectFromFacturaWhere(int nro) {
 		EntityManager em = emf.createEntityManager();
 		Factura factura = em.find(Factura.class, nro);
 		return factura;
 	}
 	
-	public void removeFactura(Factura factura) {
+	public int deleteFromFacturaWhere(Factura factura) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		factura = em.merge(factura);
 		em.remove(factura);
 		em.getTransaction().commit();
 		em.close();
+		return 0;
 	}
-	
 	/* FIN DE OPERACIONES CON FACTURA */
 	
 	/* OPERACIONES CON DETALLE */
-	
 	@SuppressWarnings("unchecked")
 	public List<Detalle> selectAllFromDetalle(){
 		EntityManager em = emf.createEntityManager();
@@ -67,26 +65,25 @@ public class Gestor {
 		return detalles;
 	}
 	
-	public Detalle selectDetalleWhere(int nro, int id) {
+	public Detalle selectFromDetalleWhere(int nro, int id) {
 		EntityManager em = emf.createEntityManager();
 		//Detalle detalle = em.find(Detalle.class,nro,id);
 		Detalle detalle = (Detalle) em.createQuery("SELECT d FROM DETALLE d WHERE ID = "+id+" AND NRO = "+nro);
 		return detalle;
 	}
 	
-	public void removeDetalle(Detalle detalle) {
+	public int deleteFromDetalleWhere(Detalle detalle) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		detalle = em.merge(detalle);
 		em.remove(detalle);
 		em.getTransaction().commit();
 		em.close();
+		return 0;
 	}
-	
 	/* FIN DE OPERACIONES CON DETALLE */
 	
 	/* OPERACIONES CON CLIENTE */
-	
 	@SuppressWarnings("unchecked")
 	public List<Cliente> selectAllFromCliente(){
 		EntityManager em = emf.createEntityManager();
@@ -95,25 +92,24 @@ public class Gestor {
 		return clientes;
 	}
 	
-	public Cliente selectClienteWhere(int idCliente) {
+	public Cliente selectFromClienteWhere(int idCliente) {
 		EntityManager em = emf.createEntityManager();
 		Cliente cliente = em.find(Cliente.class, idCliente);
 		return cliente;
 	}
 	
-	public void removeFactura(Cliente cliente) {
+	public int deleteFromClienteWhere(Cliente cliente) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		cliente = em.merge(cliente);
 		em.remove(cliente);
 		em.getTransaction().commit();
 		em.close();
+		return 0;
 	}
-	
 	/* FIN DE OPERACIONES CON CLIENTE */
 	
 	/* OPERACIONES CON PRODUCTO */
-	
 	@SuppressWarnings("unchecked")
 	public List<Producto> selectAllFromProducto(){
 		EntityManager em = emf.createEntityManager();
@@ -122,25 +118,24 @@ public class Gestor {
 		return productos;
 	}
 	
-	public Producto selectProductoWhere(int idProducto) {
+	public Producto selectFromProductoWhere(int idProducto) {
 		EntityManager em = emf.createEntityManager();
 		Producto producto = em.find(Producto.class, idProducto);
 		return producto;
 	}
 	
-	public void removeProducto(Producto producto) {
+	public int deleteFromProductoWhere(Producto producto) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		producto = em.merge(producto);
 		em.remove(producto);
 		em.getTransaction().commit();
 		em.close();
+		return 0;
 	}
-	
 	/* FIN DE OPERACIONES CON PRODUCTO */
 	
 	/* OPERACIONES CON PROVEEDOR */
-	
 	@SuppressWarnings("unchecked")
 	public List<Proveedor> selectAllFromProveedor(){
 		EntityManager em = emf.createEntityManager();
@@ -149,25 +144,20 @@ public class Gestor {
 		return proveedores;
 	}
 	
-	public Proveedor selectProveedorWhere(int idProveedor) {
+	public Proveedor selectFromProveedorWhere(int idProveedor) {
 		EntityManager em = emf.createEntityManager();
 		Proveedor proveedor = em.find(Proveedor.class, idProveedor);
 		return proveedor;
 	}
 	
-	public void removeProveedor(Proveedor proveedor) {
+	public int deleteFromProveedorWhere(Proveedor proveedor) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		proveedor = em.merge(proveedor);
 		em.remove(proveedor);
 		em.getTransaction().commit();
 		em.close();
+		return 0;
 	}
-	
 	/* FIN DE OPERACIONES CON PROVEEDOR */
-	
-	
-	
-
-	
 }

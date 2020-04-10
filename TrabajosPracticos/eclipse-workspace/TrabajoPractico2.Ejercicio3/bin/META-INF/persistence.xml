@@ -10,6 +10,8 @@
   <class>modelo.Factura</class>
   <class>modelo.Detalle</class>
   <class>modelo.Producto</class>
+  <class>modelo.Cliente</class>
+  <class>modelo.Proveedor</class>
   <!--  -->
     <properties>
         <property name="javax.persistence.jdbc.driver" value="org.firebirdsql.jdbc.FBDriver" />

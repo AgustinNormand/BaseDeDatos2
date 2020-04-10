@@ -1,0 +1,15 @@
+#BlueJ class context
+comment0.target=Main
+comment1.params=arg
+comment1.target=void\ main(java.lang.String[])
+comment2.params=
+comment2.target=javax.persistence.EntityManagerFactory\ getEntityManagerFactory()
+comment3.params=
+comment3.target=javax.persistence.EntityManager\ getEntityManager()
+comment4.params=
+comment4.target=void\ salir()
+comment5.params=
+comment5.target=void\ pantalla()
+comment6.params=e
+comment6.target=void\ windowClosing(java.awt.event.WindowEvent)
+numComments=7

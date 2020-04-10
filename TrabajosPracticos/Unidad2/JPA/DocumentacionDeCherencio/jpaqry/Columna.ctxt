@@ -1,0 +1,6 @@
+#BlueJ class context
+comment0.target=Columna
+comment0.text=\n\ Declaracion\ de\ anotacion\ propia\ que\ sirve\ para\ anotar\ los\ atributos\n\ de\ clases\ que\ a\ su\ vez\ estan\ anotadas\ como\ @javax.persistence.Entity\n\ y\ poder\ darles\ un\ nombre\ de\ columna\ a\ visualizar\ en\ JTable\n\ Se\ pueden\ agregar\ otros\ atributos\ a\ esta\ anotacion,\ como\ por\ ejemplo\ \n\ el\ ancho\ por\ defecto\ de\ la\ columna,\ color,\ etc.\ etc.\ que\ hace\ a\ la\ \n\ visualizacion\ de\ la\ misma\ en\ la\ grilla.\n\ \n\ @author\ G.Cherencio\n\ @version\ 1.0\n
+comment1.params=
+comment1.target=java.lang.String\ nombre()
+numComments=2

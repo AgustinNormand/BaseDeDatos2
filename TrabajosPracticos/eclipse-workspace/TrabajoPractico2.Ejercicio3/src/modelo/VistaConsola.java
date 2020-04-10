@@ -12,7 +12,7 @@ public class VistaConsola {
 	public VistaConsola() {
 	}
 
-	public void Iniciar() {
+	public void iniciar() {
 		menuPrincipal();		
 	}
 
@@ -23,7 +23,6 @@ public class VistaConsola {
 			System.out.println("2) Insert");
 			System.out.println("3) Update");
 			System.out.println("4) Delete");
-			System.out.println("9) Drop Database");
 			System.out.println("0) Salir");
 			opcionMenuPrincipal = scan.nextInt();
 			clearScreen();
@@ -40,8 +39,6 @@ public class VistaConsola {
 			case 4:
 				menuDelete();
 				break;
-			case 9:
-				dropDatabase();
 			}
 		}
 	}
@@ -100,7 +97,7 @@ public class VistaConsola {
 	private void selectClienteWhere() {
 		System.out.println("Ingese el ID del cliente a buscar");
 		int idCliente = scan.nextInt();
-		Cliente cliente = gdb.selectClienteWhere(idCliente);
+		Cliente cliente = gdb.selectFromClienteWhere(idCliente);
 
 		if (cliente == null) 
 			System.out.println("Cliente no encontrado");
@@ -142,7 +139,7 @@ public class VistaConsola {
 	private void selectFacturaWhere() {
 		System.out.println("Ingese el NRO de la factura a buscar");
 		int nroFactura = scan.nextInt();
-		Factura factura = gdb.selectFacturaWhere(nroFactura);
+		Factura factura = gdb.selectFromFacturaWhere(nroFactura);
 
 		if (factura == null) 
 			System.out.println("Factura no encontrada");
@@ -186,7 +183,7 @@ public class VistaConsola {
 		int nroDetalle = scan.nextInt();
 		System.out.println("Ingese el ID del DETALLE a buscar");
 		int idDetalle = scan.nextInt();
-		Detalle detalle = gdb.selectDetalleWhere(nroDetalle,idDetalle);
+		Detalle detalle = gdb.selectFromDetalleWhere(nroDetalle,idDetalle);
 
 		if (detalle == null) 
 			System.out.println("Detalle no encontrado");
@@ -228,7 +225,7 @@ public class VistaConsola {
 	private void selectProveedorWhere() {
 		System.out.println("Ingese el ID del PROVEEDOR a buscar");
 		int idProveedor = scan.nextInt();
-		Proveedor proveedor = gdb.selectProveedorWhere(idProveedor);
+		Proveedor proveedor = gdb.selectFromProveedorWhere(idProveedor);
 
 		if (proveedor == null) 
 			System.out.println("Proveedor no encontrado");
@@ -270,7 +267,7 @@ public class VistaConsola {
 	private void selectProductoWhere() {
 		System.out.println("Ingese el ID del PRODUCTO a buscar");
 		int idProducto = scan.nextInt();
-		Producto producto = gdb.selectProductoWhere(idProducto);
+		Producto producto = gdb.selectFromProductoWhere(idProducto);
 
 		if (producto == null) 
 			System.out.println("Producto no encontrado");
@@ -352,8 +349,7 @@ public class VistaConsola {
 		byte estado = scan.nextByte();
 		System.out.println("Ingese el ESTADO de la factura.");
 		double importe = scan.nextDouble();
-		Gestor gestor = Gestor.getInstance();
-		Cliente cliente = gestor.selectClienteWhere(idCliente);
+		Cliente cliente = gdb.selectFromClienteWhere(idCliente);
 		Factura factura = new Factura(nroFactura,importe,estado,new Date(),cliente);
 		int errorCode = factura.persist();
 
@@ -373,11 +369,10 @@ public class VistaConsola {
 	}
 
 	private void insertDetalle() {
-		Gestor gestor = Gestor.getInstance();
 		System.out.println("Ingresar el NRO del DETALLE");
-		Factura factura = gestor.selectFacturaWhere(scan.nextInt());
+		Factura factura = gdb.selectFromFacturaWhere(scan.nextInt());
 		System.out.println("Ingresar el ID del DETALLE");
-		Producto producto = gestor.selectProductoWhere(scan.nextInt());
+		Producto producto = gdb.selectFromProductoWhere(scan.nextInt());
 		System.out.println("Ingresar la CANTIDAD del DETALLE");
 		int cantidad = scan.nextInt();
 		System.out.println("Ingresar el PRECIO del DETALLE");
@@ -400,7 +395,6 @@ public class VistaConsola {
 		returnMenuAnterior();
 	}
 	private void insertProveedor() {
-		Gestor gestor = Gestor.getInstance();
 		System.out.println("Ingresar el ID del PROVEEDOR a insertar");
 		int idProveedor = scan.nextInt();
 		System.out.println("Ingresar el NOMBRE del PROVEEDOR a insertar");
@@ -412,7 +406,7 @@ public class VistaConsola {
 			System.out.println("Ingresar ID de PRODUCTO que provee el PROVEEDOR");
 			idProducto = scan.nextInt();
 			if (idProducto != 0)
-				productosQueProvee.add(gestor.selectProductoWhere(idProducto));
+				productosQueProvee.add(gdb.selectFromProductoWhere(idProducto));
 		}
 		Proveedor proveedor = new Proveedor(idProveedor,nombre,productosQueProvee);
 		int errorCode = proveedor.persist();
@@ -427,7 +421,26 @@ public class VistaConsola {
 		returnMenuAnterior();
 	}
 	private void insertProducto() {
-
+		Producto producto = new Producto();
+		System.out.println("Ingresar el ID del PRODUCTO");
+		producto.setId(scan.nextInt());
+		System.out.println("Ingresar la DESCRIPCION del PRODUCTO");
+		producto.setDescr(scan.next());
+		System.out.println("Ingresar el STOCK del PRODUCTO");
+		producto.setStock(scan.nextInt());
+		System.out.println("Ingresar el PRECIO BASE del PRODUCTO");
+		producto.setPrecioBase(scan.nextDouble());
+		System.out.println("Ingresar el PRECIO COSTO del PRODUCTO");
+		producto.setPrecioCosto(scan.nextDouble());
+		int errorCode = producto.persist();
+		switch (errorCode) {
+		case 0:
+			System.out.println("PRODUCTO insertado correctamente");
+			break;
+		case 1:
+			System.out.println("Ya existe un PRODUCTO con el ID ingresado");
+			break;
+		}
 	}
 
 	//
@@ -468,7 +481,7 @@ public class VistaConsola {
 	private void deleteCliente(){
 		System.out.println("Ingrese el ID del cliente a eliminar");
 		int idCliente = scan.nextInt();
-		int errorCode = gdb.deleteCliente(idCliente);
+		int errorCode = gdb.deleteFromClienteWhere(gdb.selectFromClienteWhere(idCliente));
 		switch(errorCode) {
 		case 0:
 			System.out.println("Cliente eliminado correctamente");
@@ -484,7 +497,7 @@ public class VistaConsola {
 	private void deleteFactura(){
 		System.out.println("Ingrese el NRO de la factura a eliminar");
 		int nroFactura = scan.nextInt();
-		int errorCode = gdb.deleteFactura(nroFactura);
+		int errorCode = gdb.deleteFromFacturaWhere(gdb.selectFromFacturaWhere(nroFactura));
 		switch(errorCode) {
 		case 0:
 			System.out.println("Factura eliminada correctamente");
@@ -493,8 +506,54 @@ public class VistaConsola {
 			System.out.println("El NRO ingresado no pertenece a una factura en la base de datos");
 			break;
 		}
-
 		returnMenuAnterior();
+	}
+	
+	private void deleteDetalle() {
+		System.out.println("Ingrese el NRO del DETALLE a eliminar");
+		int nroDetalle = scan.nextInt();
+		System.out.println("Ingrese el ID del DETALLE a eliminar");
+		int idDetalle = scan.nextInt();
+		int errorCode = gdb.deleteFromDetalleWhere(gdb.selectFromDetalleWhere(nroDetalle,idDetalle));
+		switch(errorCode) {
+		case 0:
+			System.out.println("DETALLE eliminado correctamente");
+			break;
+		case 1:
+			System.out.println("El NRO y/o ID ingresados no pertenecen a un DETALLE en la base de datos");
+			break;
+		}
+		returnMenuAnterior();
+	}
+	
+	private void deleteProveedor() {
+		System.out.println("Ingrese el ID del PROVEEDOR a eliminar");
+		int idProveedor = scan.nextInt();
+		int errorCode = gdb.deleteFromProveedorWhere(gdb.selectFromProveedorWhere(idProveedor));
+		switch(errorCode) {
+		case 0:
+			System.out.println("Proveedor eliminado correctamente");
+			break;
+		case 1:
+			System.out.println("El ID ingresado no pertenece a un PROVEEDOR en la base de datos");
+			break;
+		}
+		returnMenuAnterior();
+	}
+	
+	private void deleteProducto() {
+		System.out.println("Ingrese el ID del PRODUCTO a eliminar");
+		int idProducto = scan.nextInt();
+		int errorCode = gdb.deleteFromProductoWhere(gdb.selectFromProductoWhere(idProducto));
+		switch(errorCode) {
+		case 0:
+			System.out.println("Producto eliminado correctamente");
+			break;
+		case 1:
+			System.out.println("El ID ingresado no pertenece a un PRODUCTO en la base de datos");
+			break;
+		}
+		returnMenuAnterior();	
 	}
 
 	// UPDATE
@@ -531,6 +590,7 @@ public class VistaConsola {
 	}
 
 	private void updateCliente() {
+		/*
 		System.out.println("Ingrese el ID del cliente a modificar");
 		int idClienteAModificar = scan.nextInt();
 		System.out.println("Ingrese el nuevo ID");
@@ -549,10 +609,12 @@ public class VistaConsola {
 			System.out.println("El nuevo ID ya existe en la base de datos");
 			break;
 		}
+		*/
 		returnMenuAnterior();
 	}
 
 	private void updateFactura() {
+		/*
 		System.out.println("Ingrese el NUMERO de la factura a modificar");
 		int nroFacturaAModificar = scan.nextInt();
 		System.out.println("Ingrese el nuevo NUMERO");
@@ -576,24 +638,24 @@ public class VistaConsola {
 			System.out.println("El nuevo NUMERO ya existe en la base de datos");
 			break;
 		}
+		*/
+		returnMenuAnterior();
+	}
+	
+	private void updateDetalle() {
+		returnMenuAnterior();
+	}
+	
+	private void updateProveedor() {
+		returnMenuAnterior();
+	}
+	
+	private void updateProducto() {
 		returnMenuAnterior();
 	}
 
 	//
-
-	public void dropDatabase() {
-		clearScreen();
-		int errorCode = gdb.dropDatabase();
-		switch(errorCode) {
-		case 0:
-			System.out.println("Base de datos eliminada correctamente");
-			break;
-		case 1:
-			System.out.println("No existe una base de datos creada");
-			break;
-		}
-		returnMenuAnterior();
-	}
+	
 	public void returnMenuAnterior() {
 		System.out.println("Persione una tecla para volver al menu anterior.");
 		try {
