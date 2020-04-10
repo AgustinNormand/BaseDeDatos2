@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>TrabajoPractico2.Ejercicio3</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>.settings/jlib</name>
+			<type>2</type>
+			<location>/home/agustin/Desktop/BaseDeDatos2/TrabajosPracticos/Unidad2/TrabajoPractico2/Ejercicio3/Librerias/VersionesViejas/eclipselink-2.0.1.v20100213-r6600/eclipselink/jlib</location>
+		</link>
+	</linkedResources>
+</projectDescription>
