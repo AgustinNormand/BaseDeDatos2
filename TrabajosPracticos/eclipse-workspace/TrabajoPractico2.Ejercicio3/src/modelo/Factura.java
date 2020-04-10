@@ -24,12 +24,21 @@ public class Factura implements Serializable{
 	private Cliente cliente;
 	
 	public int persist() {
-		int errorCode = 0;
-		Gestor gestor = Gestor.getInstance();
-		gestor.persist(this);
-		return errorCode;
+		return Gestor.getInstance().persist(this);
 	}
-
+	
+	public Factura() {
+		
+	}
+	
+	public Factura(int nro, double importe, byte estado, Date fecha, Cliente cliente) {
+		this.nro = nro;
+		this.importe = importe;
+		this.estado = estado;
+		this.fecha = fecha;
+		this.cliente = cliente;
+	}
+	
 	public int getNro() {
 		return nro;
 	}

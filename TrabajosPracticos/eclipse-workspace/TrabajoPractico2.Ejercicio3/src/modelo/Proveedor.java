@@ -12,8 +12,18 @@ public class Proveedor implements Serializable{
 	
 	private List<Producto> productosQueProvee;
 	
-	public void persist() {
-		Gestor.getInstance().persist(this);
+	public int persist() {
+		return Gestor.getInstance().persist(this);
+	}
+	
+	public Proveedor() {
+		
+	}
+	
+	public Proveedor(int id, String nombre, List<Producto> productosQueProvee) {
+		this.id = id;
+		this.nombre = nombre;
+		this.productosQueProvee = productosQueProvee;
 	}
 
 	public int getId() {

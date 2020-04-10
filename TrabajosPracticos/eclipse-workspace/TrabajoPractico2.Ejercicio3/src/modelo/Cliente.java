@@ -10,8 +10,17 @@ public class Cliente {
 	
 	private List<Factura> facturas;
 
-	public void persist() {
-		Gestor.getInstance().persist(this);
+	public int persist() {
+		return Gestor.getInstance().persist(this);
+	}
+	
+	public Cliente() {
+		
+	}
+	
+	public Cliente(int id, String nombre) {
+		this.id = id;
+		this.nombre = nombre;
 	}
 	
 	public int getId() {

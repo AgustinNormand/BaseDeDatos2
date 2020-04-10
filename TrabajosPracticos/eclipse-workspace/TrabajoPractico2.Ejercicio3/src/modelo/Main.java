@@ -5,37 +5,6 @@ import java.util.Scanner;
 public class Main {
 	private static Scanner in = new Scanner(System.in); 
 	public static void main(String[] args) {
-		int opcion = -1;
-		while (opcion != 0) {
-			System.out.println("1) Insertar factura");
-			System.out.println("2) SELECT * FROM FACTURA");
-			System.out.println("3) SELECT * FROM FACTURA WHERE");
-			System.out.println("4) DELETE FROM FACTURA WHERE NRO =");
-			System.out.println("5) Insertar producto");
-			System.out.println("6) Insertar detalle");
-			System.out.println("0) Salir");
-			opcion = in.nextInt();
-			switch (opcion) {
-			case 1:
-				insertarFactura();
-				break;
-			case 2:
-				query();
-				break;
-			case 3:
-				selectFacturaWhere();
-				break;
-			case 4:
-				deleteFromFacturaWhere();
-				break;
-			case 5:
-				insertIntoProducto();
-				break;
-			case 6:
-				insertIntoDetalle();
-				break;
-			}
-		}
 	}
 	private static void insertIntoDetalle() {
 		Detalle detalle = new Detalle();

@@ -35,7 +35,7 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Factura> selectAllFromFactura(){
 		EntityManager em = emf.createEntityManager();
-		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM Factura f").getResultList();
+		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM FACTURA f").getResultList();
 		em.close();
 		return facturas;
 	}
@@ -62,14 +62,15 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Detalle> selectAllFromDetalle(){
 		EntityManager em = emf.createEntityManager();
-		List<Detalle> detalles = (List<Detalle>)  em.createQuery("SELECT d FROM Detalle d").getResultList();
+		List<Detalle> detalles = (List<Detalle>)  em.createQuery("SELECT d FROM DETALLE d").getResultList();
 		em.close();
 		return detalles;
 	}
 	
-	public Factura selectDetalleWhere(int nro, int id) {
+	public Detalle selectDetalleWhere(int nro, int id) {
 		EntityManager em = emf.createEntityManager();
-		Factura detalle = em.find(Detalle.class,nro,id);
+		//Detalle detalle = em.find(Detalle.class,nro,id);
+		Detalle detalle = (Detalle) em.createQuery("SELECT d FROM DETALLE d WHERE ID = "+id+" AND NRO = "+nro);
 		return detalle;
 	}
 	
@@ -84,86 +85,86 @@ public class Gestor {
 	
 	/* FIN DE OPERACIONES CON DETALLE */
 	
-	/* OPERACIONES CON FACTURA */
+	/* OPERACIONES CON CLIENTE */
 	
 	@SuppressWarnings("unchecked")
-	public List<Factura> selectAllFromFactura(){
+	public List<Cliente> selectAllFromCliente(){
 		EntityManager em = emf.createEntityManager();
-		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM Factura f").getResultList();
+		List<Cliente> clientes = (List<Cliente>)  em.createQuery("SELECT c FROM CLIENTE c").getResultList();
 		em.close();
-		return facturas;
+		return clientes;
 	}
 	
-	public Factura selectFacturaWhere(int nro) {
+	public Cliente selectClienteWhere(int idCliente) {
 		EntityManager em = emf.createEntityManager();
-		Factura factura = em.find(Factura.class, nro);
-		return factura;
+		Cliente cliente = em.find(Cliente.class, idCliente);
+		return cliente;
 	}
 	
-	public void removeFactura(Factura factura) {
+	public void removeFactura(Cliente cliente) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		factura = em.merge(factura);
-		em.remove(factura);
+		cliente = em.merge(cliente);
+		em.remove(cliente);
 		em.getTransaction().commit();
 		em.close();
 	}
 	
-	/* FIN DE OPERACIONES CON FACTURA */
+	/* FIN DE OPERACIONES CON CLIENTE */
 	
-	/* OPERACIONES CON FACTURA */
+	/* OPERACIONES CON PRODUCTO */
 	
 	@SuppressWarnings("unchecked")
-	public List<Factura> selectAllFromFactura(){
+	public List<Producto> selectAllFromProducto(){
 		EntityManager em = emf.createEntityManager();
-		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM Factura f").getResultList();
+		List<Producto> productos = (List<Producto>)  em.createQuery("SELECT p FROM PRODUCTO p").getResultList();
 		em.close();
-		return facturas;
+		return productos;
 	}
 	
-	public Factura selectFacturaWhere(int nro) {
+	public Producto selectProductoWhere(int idProducto) {
 		EntityManager em = emf.createEntityManager();
-		Factura factura = em.find(Factura.class, nro);
-		return factura;
+		Producto producto = em.find(Producto.class, idProducto);
+		return producto;
 	}
 	
-	public void removeFactura(Factura factura) {
+	public void removeProducto(Producto producto) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		factura = em.merge(factura);
-		em.remove(factura);
+		producto = em.merge(producto);
+		em.remove(producto);
 		em.getTransaction().commit();
 		em.close();
 	}
 	
-	/* FIN DE OPERACIONES CON FACTURA */
+	/* FIN DE OPERACIONES CON PRODUCTO */
 	
-	/* OPERACIONES CON FACTURA */
+	/* OPERACIONES CON PROVEEDOR */
 	
 	@SuppressWarnings("unchecked")
-	public List<Factura> selectAllFromFactura(){
+	public List<Proveedor> selectAllFromProveedor(){
 		EntityManager em = emf.createEntityManager();
-		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM Factura f").getResultList();
+		List<Proveedor> proveedores = (List<Proveedor>)  em.createQuery("SELECT p FROM PROVEEDOR p").getResultList();
 		em.close();
-		return facturas;
+		return proveedores;
 	}
 	
-	public Factura selectFacturaWhere(int nro) {
+	public Proveedor selectProveedorWhere(int idProveedor) {
 		EntityManager em = emf.createEntityManager();
-		Factura factura = em.find(Factura.class, nro);
-		return factura;
+		Proveedor proveedor = em.find(Proveedor.class, idProveedor);
+		return proveedor;
 	}
 	
-	public void removeFactura(Factura factura) {
+	public void removeProveedor(Proveedor proveedor) {
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		factura = em.merge(factura);
-		em.remove(factura);
+		proveedor = em.merge(proveedor);
+		em.remove(proveedor);
 		em.getTransaction().commit();
 		em.close();
 	}
 	
-	/* FIN DE OPERACIONES CON FACTURA */
+	/* FIN DE OPERACIONES CON PROVEEDOR */
 	
 	
 	

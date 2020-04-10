@@ -25,39 +25,56 @@ public class Detalle implements Serializable{
 	@Column(nullable=false,name="PRECIO")
 	private double precio;
 	
+	public int persist () {
+		return Gestor.getInstance().persist(this);
+	}
+	
+	public Detalle() {
+		
+	}
+	
+	public Detalle(Factura factura, Producto producto, int cantidad, double precio) {
+		this.factura = factura;
+		this.producto = producto;
+		this.cantidad = cantidad; 
+		this.precio = precio;
+	}
 	
 	public Factura getFactura() {
 		return factura;
 	}
+	
 	public void setFactura(Factura factura) {
 		this.factura = factura;
 	}
+	
 	public Producto getProducto() {
 		return producto;
 	}
+	
 	public void setProducto(Producto producto) {
 		this.producto = producto;
 	}
+	
 	public int getCantidad() {
 		return cantidad;
 	}
+	
 	public void setCantidad(int cantidad) {
 		this.cantidad = cantidad;
 	}
+	
 	public double getPrecio() {
 		return precio;
 	}
+	
 	public void setPrecio(double precio) {
 		this.precio = precio;
 	}
+	
 	@Override
 	public String toString() {
 		return "Detalle [factura=" + factura + ", producto=" + producto + ", cantidad=" + cantidad + ", precio="
 				+ precio + "]";
 	}
-	
-	public void persist () {
-		Gestor.getInstance().persist(this);
-	}
-	
 }
