@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity(name = "Direccion")
@@ -24,6 +26,9 @@ public class Direccion implements Serializable{
 	
 	@Column(name = "LOCALIDAD")
 	private String localidad;
+	
+	@OneToOne(mappedBy = "direccion", fetch = FetchType.LAZY)
+	private Cliente cliente;
 	
 	public int persist() {
 		return Gestor.getInstance().persist(this);
@@ -60,9 +65,18 @@ public class Direccion implements Serializable{
 	public void setLocalidad(String localidad) {
 		this.localidad = localidad;
 	}
+	
+	public Cliente getCliente() {
+		return this.cliente;
+	}
+	
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 
 	@Override
 	public String toString() {
-		return "Direccion [id=" + id + ", calle=" + calle + ", nro=" + nro + ", localidad=" + localidad + "]";
+		return "Direccion [id=" + id + ", calle=" + calle + ", nro=" + nro 
+				+ ", localidad=" + localidad + ", cliente=" + cliente.getId() + "]";
 	}
 }

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity(name = "Producto")
@@ -14,24 +15,27 @@ public class Producto implements Serializable{
 	private static final long serialVersionUID = -882788105809591721L;
 	
 	@Id
-	@Column(nullable = false, name = "ID")
+	@Column(name = "ID")
 	private int id;
 	
-	@Column(nullable = false, name = "DESCR", length = 50)
+	@Column(name = "DESCR", length = 50)
 	private String descr;
 	
-	@Column(nullable = false, name = "STOCK")
+	@Column(name = "STOCK")
 	private int stock;
 	
-	@Column(nullable = false, name = "PRECIO_BASE")
+	@Column(name = "PRECIO_BASE")
 	private double precioBase;
 	
-	@Column(nullable = false, name = "PRECIO_COSTO")
+	@Column(name = "PRECIO_COSTO")
 	private double precioCosto;
 	
 	@ManyToMany
 	@JoinColumn(table = "PROD_PROV", name = "ID_PROVEEDOR", nullable = false)
 	private List<Proveedor> proveedores;
+	
+	@OneToMany(mappedBy = "id")
+	private List<Detalle> detalles;
 	
 	public int persist() {
 		return Gestor.getInstance().persist(this);

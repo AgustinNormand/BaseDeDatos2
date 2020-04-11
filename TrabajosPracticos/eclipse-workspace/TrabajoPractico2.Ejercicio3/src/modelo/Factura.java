@@ -1,11 +1,15 @@
 package modelo;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity(name = "Factura")
@@ -15,21 +19,24 @@ public class Factura implements Serializable{
 	
 	@Id
 	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator = "GEN_NRO_FACTURA")
-	@Column(nullable = false, name = "NRO"/*, columnDefinition = "INTEGER"*/)
+	@Column(nullable = false, name = "NRO")
 	private int nro;
 	
-	@Column(nullable = false, name = "IMPORTE"/*, columnDefinition = "DOUBLE"*/)
+	@Column(nullable = false, name = "IMPORTE")
 	private double importe;
 	
-	@Column(nullable = false, name = "ESTADO"/*, columnDefinition = "INTEGER"*/)
+	@Column(nullable = false, name = "ESTADO")
 	private byte estado;
 	
-	@Column(nullable = false, name = "FECHA"/*, columnDefinition = "DATE DEFAULT CURRENT_DATE"*/)
+	@Column(nullable = false, name = "FECHA")
 	private Date fecha;
 	
-	@ManyToOne
-	@JoinColumn(name = "ID_CLIENTE", table = "CLIENTE")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "ID_CLIENTE")
 	private Cliente cliente;
+	
+	@OneToMany(mappedBy = "factura")
+	private List<Detalle> detalles;
 	
 	public int persist() {
 		return Gestor.getInstance().persist(this);

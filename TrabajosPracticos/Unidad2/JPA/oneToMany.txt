@@ -1,0 +1,22 @@
+OBJETIVO, MOSTRAR COMO FUNCIONA ONETOMANY
+
+La parte de la izquierda del TO, hace referencia a la clase donde esta escrita la anotacion, 
+
+La parte de la derecha, a la clase en el otro extremo.
+
+UN AUTOR, MUCHOS LIBROS
+
+AUTOR
+ONETOMANY
+List<Libro> Libritos
+
+Libro
+MANYTOONE
+Autor autor.
+
+
+MAPPEDBY,
+Nombre del campo en la otra tabla que hace referencia a la clase actual
+
+Libro
+ManyToOne(mappedBy = "Libritos")

@@ -3,8 +3,10 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -20,19 +22,19 @@ public class Detalle implements Serializable{
 	private static final long serialVersionUID = 1545593860994203236L;
 	
 	@Id
-	@JoinColumn(nullable = false, name = "NRO", table = "FACTURA")
-	@OneToOne
+	@JoinColumn(name = "NRO")
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Factura factura;
 	
 	@Id
-	@JoinColumn(nullable = false, name = "ID", table = "PRODUCTO")
-	@OneToOne
+	@JoinColumn(name = "ID")
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Producto producto;
 	
-	@Column(nullable = false, name = "CANTIDAD")
+	@Column(name = "CANTIDAD")
 	private int cantidad;
 	
-	@Column(nullable = false, name = "PRECIO")
+	@Column(name = "PRECIO")
 	private double precio;
 	
 	public int persist () {

@@ -23,12 +23,11 @@ public class Cliente implements Serializable{
 	@Column(name = "NOMBRE")
 	private String nombre;
 	
-	@OneToMany
-	@JoinColumn(nullable = false, table = "FACTURA")
+	@OneToMany(mappedBy = "cliente")
 	private List<Factura> facturas;
 	
-	@OneToOne(cascade = { CascadeType.ALL } ) //Me deja ingresar el CLIENTE si la DIRECCION todavia no esta cargada en la DB, y guarda todo junto.
-	@JoinColumn(nullable = false, name = "ID_DIRECCION", table = "DIRECCION")
+	//@OneToOne(cascade = { CascadeType.ALL } ) //Me deja ingresar el CLIENTE si la DIRECCION todavia no esta cargada en la DB, y guarda todo junto.
+	@JoinColumn(name = "ID_DIRECCION")
 	private Direccion direccion;
 
 	public int persist() {
