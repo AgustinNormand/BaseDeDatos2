@@ -6,8 +6,8 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/agustin/Desktop/BaseDeDatos2/TrabajosPracticos/Unidad2/TrabajoPractico2/Ejercicio3/Librerias/VersionesViejas/eclipselink-2.0.1.v20100213-r6600/eclipselink/jlib/jpa/javax.persistence_2.0.0.v201002051058.jar"/>
-	<classpathentry kind="lib" path="/home/agustin/Downloads/jaybird-4.0.0.java11/jaybird-full-4.0.0.java11.jar"/>
-	<classpathentry kind="lib" path="/home/agustin/Desktop/BaseDeDatos2/TrabajosPracticos/Unidad2/TrabajoPractico2/Ejercicio3/Librerias/VersionesNuevas/eclipselink-2.7.6.v20200131-b7c997804f/eclipselink/jlib/eclipselink.jar"/>
+	<classpathentry kind="lib" path="/home/agustin/Desktop/BaseDeDatos2/TrabajosPracticos/Unidad2/TrabajoPractico2/Ejercicio3/Librerias/jaybird/jaybird-4.0.0.java11/jaybird-full-4.0.0.java11.jar"/>
+	<classpathentry kind="lib" path="/home/agustin/Desktop/BaseDeDatos2/TrabajosPracticos/Unidad2/TrabajoPractico2/Ejercicio3/Librerias/eclipselink-2.7.6.v20200131-b7c997804f/eclipselink/jlib/eclipselink.jar"/>
+	<classpathentry kind="lib" path="/home/agustin/Desktop/BaseDeDatos2/TrabajosPracticos/Unidad2/TrabajoPractico2/Ejercicio3/Librerias/eclipselink-2.7.6.v20200131-b7c997804f/eclipselink/jlib/jpa/jakarta.persistence_2.2.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

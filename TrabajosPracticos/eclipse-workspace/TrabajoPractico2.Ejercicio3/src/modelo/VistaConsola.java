@@ -53,6 +53,7 @@ public class VistaConsola {
 			System.out.println("3) Detalle");
 			System.out.println("4) Proveedor");
 			System.out.println("5) Producto");
+			System.out.println("6) Direccion");
 			System.out.println("0) Volver");
 			opcionMenuSelect = scan.nextInt();
 			clearScreen();
@@ -71,6 +72,9 @@ public class VistaConsola {
 				break;
 			case 5:
 				menuSelectProducto();
+				break;
+			case 6:
+				menuSelectDireccion();
 				break;
 			}
 		}
@@ -286,6 +290,48 @@ public class VistaConsola {
 				System.out.println(producto);
 		returnMenuAnterior();	
 	}
+	
+	private void menuSelectDireccion() {
+		int opcionMenuSelectDireccion = -1;
+		while (opcionMenuSelectDireccion != 0) {
+			System.out.println("1) Select * From Direccion");
+			System.out.println("2) Select * From Direccion Where ...");
+			System.out.println("0) Volver");
+			opcionMenuSelectDireccion = scan.nextInt();
+			clearScreen();
+			switch (opcionMenuSelectDireccion) {
+			case 1:
+				selectAllFromDireccion();
+				break;
+			case 2:
+				selectDireccionWhere();
+				break;
+			}
+		}
+	}
+
+	private void selectDireccionWhere() {
+		System.out.println("Ingese el ID de la DIRECCION a buscar");
+		int idDireccion = scan.nextInt();
+		Direccion direccion = gdb.selectFromDireccionWhere(idDireccion);
+
+		if (direccion == null) 
+			System.out.println("Direccion no encontrada");
+		else
+			System.out.println(direccion);
+
+		returnMenuAnterior();
+	}
+
+	private void selectAllFromDireccion() {
+		List<Direccion> direcciones = gdb.selectAllFromDireccion();
+		if (direcciones.isEmpty())
+			System.out.println("No hay DIRECCIONES en la base de datos");
+		else
+			for (Direccion direccion : direcciones) 
+				System.out.println(direccion);
+		returnMenuAnterior();	
+	}
 
 	//
 
@@ -299,6 +345,7 @@ public class VistaConsola {
 			System.out.println("3) Detalle");
 			System.out.println("4) Proveedor");
 			System.out.println("5) Producto");
+			System.out.println("6) Direccion");
 			System.out.println("0) Volver");
 			opcionMenuInsert = scan.nextInt();
 			clearScreen();
@@ -317,6 +364,9 @@ public class VistaConsola {
 				break;
 			case 5:
 				insertProducto();
+				break;
+			case 6:
+				insertDireccion();
 				break;
 			}
 		}
@@ -442,6 +492,27 @@ public class VistaConsola {
 			break;
 		}
 	}
+	
+	private void insertDireccion() {
+		Direccion direccion = new Direccion();
+		System.out.println("Ingresar el ID del DIRECCION");
+		direccion.setId(scan.nextInt());
+		System.out.println("Ingresar la CALLE de la DIRECCION");
+		direccion.setCalle(scan.next());
+		System.out.println("Ingresar el NRO de la DIRECCION");
+		direccion.setNro(scan.nextInt());
+		System.out.println("Ingresar la LOCALIDAD de la DIRECCION");
+		direccion.setLocalidad(scan.next());
+		int errorCode = direccion.persist();
+		switch (errorCode) {
+		case 0:
+			System.out.println("DIRECCION insertada correctamente");
+			break;
+		case 1:
+			System.out.println("Ya existe una DIRECCION con el ID ingresado");
+			break;
+		}
+	}
 
 	//
 
@@ -455,6 +526,7 @@ public class VistaConsola {
 			System.out.println("3) Detalle");
 			System.out.println("4) Proveedor");
 			System.out.println("5) Producto");
+			System.out.println("6) Direccion");
 			System.out.println("0) Volver");
 			opcionmenuDelete = scan.nextInt();
 			clearScreen();
@@ -474,6 +546,10 @@ public class VistaConsola {
 			case 5:
 				deleteProducto();
 				break;
+			case 6:
+				deleteDireccion();
+				break;
+					
 			}
 		}
 	}
@@ -555,6 +631,22 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();	
 	}
+	
+	private void deleteDireccion() {
+		System.out.println("Ingrese el ID de la DIRECCION a eliminar");
+		int idDireccion = scan.nextInt();
+		int errorCode = gdb.deleteFromDireccionWhere(gdb.selectFromDireccionWhere(idDireccion));
+		switch(errorCode) {
+		case 0:
+			System.out.println("Direccion eliminada correctamente");
+			break;
+		case 1:
+			System.out.println("El ID ingresado no pertenece a una DIRECCION en la base de datos");
+			break;
+		}
+		returnMenuAnterior();	
+	}
+
 
 	// UPDATE
 
@@ -566,6 +658,7 @@ public class VistaConsola {
 			System.out.println("3) Detalle");
 			System.out.println("4) Proveedor");
 			System.out.println("5) Producto");
+			System.out.println("6) Direccion");
 			System.out.println("0) Volver");
 			opcionmenuUpdate = scan.nextInt();
 			clearScreen();
@@ -584,6 +677,9 @@ public class VistaConsola {
 				break;
 			case 5:
 				updateProducto();
+				break;
+			case 6:
+				updateDireccion();
 				break;
 			}
 		}
@@ -653,7 +749,9 @@ public class VistaConsola {
 	private void updateProducto() {
 		returnMenuAnterior();
 	}
-
+	private void updateDireccion() {
+		returnMenuAnterior();
+	}
 	//
 	
 	public void returnMenuAnterior() {

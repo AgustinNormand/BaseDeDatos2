@@ -2,13 +2,25 @@ package modelo;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+@Entity
+@Table(name = "Cliente")
 public class Cliente {
-	
+	@Id
+	@Column(name = "ID")
 	private int id;
-	
+	@Column(name = "NOMBRE")
 	private String nombre;
-	
+	@OneToMany
 	private List<Factura> facturas;
+	@OneToOne(cascade = { CascadeType.ALL } ) //Me deja ingresar el CLIENTE si la DIRECCION todavia no esta cargada en la DB, y guarda todo junto.
+	private Direccion direccion;
 
 	public int persist() {
 		return Gestor.getInstance().persist(this);

@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,7 +22,7 @@ public class Producto implements Serializable{
 	private double precioBase;
 	@Column(nullable=false,name="PRECIO_COSTO")
 	private double precioCosto;
-	
+	@ManyToMany
 	private List<Proveedor> proveedores;
 	
 	public int persist() {

@@ -4,6 +4,8 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,7 +22,8 @@ public class Factura implements Serializable{
 	private byte estado;
 	@Column(nullable=false,name="FECHA",columnDefinition="DATE DEFAULT CURRENT_DATE")
 	private Date fecha;
-	
+	@ManyToOne
+	@JoinColumn(name="ID_CLIENTE")
 	private Cliente cliente;
 	
 	public int persist() {

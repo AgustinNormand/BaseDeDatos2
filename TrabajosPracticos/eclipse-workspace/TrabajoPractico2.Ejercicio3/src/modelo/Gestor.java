@@ -160,4 +160,30 @@ public class Gestor {
 		return 0;
 	}
 	/* FIN DE OPERACIONES CON PROVEEDOR */
+	
+	/* OPERACIONES CON DIRECCION */
+	@SuppressWarnings("unchecked")
+	public List<Direccion> selectAllFromDireccion(){
+		EntityManager em = emf.createEntityManager();
+		List<Direccion> direcciones = (List<Direccion>)  em.createQuery("SELECT d FROM DIRECCION d").getResultList();
+		em.close();
+		return direcciones;
+	}
+	
+	public Direccion selectFromDireccionWhere(int idDireccion) {
+		EntityManager em = emf.createEntityManager();
+		Direccion direccion = em.find(Direccion.class, idDireccion);
+		return direccion;
+	}
+	
+	public int deleteFromDireccionWhere(Direccion direccion) {
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		direccion = em.merge(direccion);
+		em.remove(direccion);
+		em.getTransaction().commit();
+		em.close();
+		return 0;
+	}
+	/* FIN DE OPERACIONES CON DIRECCION */
 }
