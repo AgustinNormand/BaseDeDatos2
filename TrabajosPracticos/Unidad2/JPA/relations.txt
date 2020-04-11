@@ -21,3 +21,9 @@ Hasta que no intentemos hacer un get factura, no se nos van a cargar.
 Las relaciones @ManyToMany por defecto son LAZY, ya que la probabilidad de traer millones de tuplas a memoria es mayor.
 
 
+
+Suponiendo que un CLIENTE puede tener MUCHAS FACTURAS.
+En la clase CLIENTE, se pone @OneToMany
+En la clase FACTURA, se pone @ManyToOne
+
+

@@ -6,18 +6,23 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-@Entity
+@Entity(name = "Proveedor")
 @Table(name = "PROVEEDOR")
 public class Proveedor implements Serializable{
 	private static final long serialVersionUID = 3425899765540828838L;
+	
 	@Id
 	@Column(name = "ID")
 	private int id;
+	
 	@Column(name = "NOMBRE")
 	private String nombre;
+	
 	@ManyToMany
+	@JoinColumn(table = "PROD_PROV", name = "ID_PRODUCTO", nullable = false)
 	private List<Producto> productosQueProvee;
 	
 	public int persist() {
@@ -28,12 +33,6 @@ public class Proveedor implements Serializable{
 		
 	}
 	
-	public Proveedor(int id, String nombre, List<Producto> productosQueProvee) {
-		this.id = id;
-		this.nombre = nombre;
-		this.productosQueProvee = productosQueProvee;
-	}
-
 	public int getId() {
 		return id;
 	}

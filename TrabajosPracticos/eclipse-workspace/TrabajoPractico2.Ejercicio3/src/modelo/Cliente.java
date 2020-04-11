@@ -1,25 +1,34 @@
 package modelo;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-@Entity
+@Entity(name = "Cliente")
 @Table(name = "Cliente")
-public class Cliente {
+public class Cliente implements Serializable{
+	private static final long serialVersionUID = -5871670784249780534L;
+	
 	@Id
 	@Column(name = "ID")
 	private int id;
+	
 	@Column(name = "NOMBRE")
 	private String nombre;
+	
 	@OneToMany
+	@JoinColumn(nullable = false, table = "FACTURA")
 	private List<Factura> facturas;
+	
 	@OneToOne(cascade = { CascadeType.ALL } ) //Me deja ingresar el CLIENTE si la DIRECCION todavia no esta cargada en la DB, y guarda todo junto.
+	@JoinColumn(nullable = false, name = "ID_DIRECCION", table = "DIRECCION")
 	private Direccion direccion;
 
 	public int persist() {
@@ -29,12 +38,7 @@ public class Cliente {
 	public Cliente() {
 		
 	}
-	
-	public Cliente(int id, String nombre) {
-		this.id = id;
-		this.nombre = nombre;
-	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -59,9 +63,16 @@ public class Cliente {
 		this.facturas = facturas;
 	}
 
-	@Override
-	public String toString() {
-		return "Cliente [id=" + id + ", nombre=" + nombre + ", facturas=" + facturas + "]";
+	public Direccion getDireccion() {
+		return direccion;
 	}
 
+	public void setDireccion(Direccion direccion) {
+		this.direccion = direccion;
+	}
+
+	@Override
+	public String toString() {
+		return "Cliente [id=" + id + ", nombre=" + nombre + ", facturas=" + facturas + ", direccion=" + direccion + "]";
+	}
 }

@@ -27,6 +27,9 @@ public class VistaConsola {
 			opcionMenuPrincipal = scan.nextInt();
 			clearScreen();
 			switch (opcionMenuPrincipal){
+			case 0:
+				gdb.close();
+				break;
 			case 1:
 				menuSelect();
 				break;
@@ -40,6 +43,7 @@ public class VistaConsola {
 				menuDelete();
 				break;
 			}
+			
 		}
 	}
 
@@ -112,7 +116,7 @@ public class VistaConsola {
 	}
 
 	private void selectAllFromCliente() {
-		List<Cliente> clientes = gdb.selectAllFromCliente();
+		List<Cliente> clientes = gdb.selectFromCliente();
 		if (clientes.isEmpty())
 			System.out.println("No hay clientes en la base de datos");
 		else
@@ -154,7 +158,7 @@ public class VistaConsola {
 	}
 
 	private void selectAllFromFactura(){
-		List<Factura> facturas = gdb.selectAllFromFactura();
+		List<Factura> facturas = gdb.selectFromFactura();
 		if (facturas.isEmpty())
 			System.out.println("No hay facturas en la base de datos");
 		else
@@ -198,7 +202,7 @@ public class VistaConsola {
 	}
 
 	private void selectAllFromDetalle() {
-		List<Detalle> detalles = gdb.selectAllFromDetalle();
+		List<Detalle> detalles = gdb.selectFromDetalle();
 		if (detalles.isEmpty())
 			System.out.println("No hay detalles en la base de datos");
 		else
@@ -240,7 +244,7 @@ public class VistaConsola {
 	}
 
 	private void selectAllFromProveedor() {
-		List<Proveedor> proveedores = gdb.selectAllFromProveedor();
+		List<Proveedor> proveedores = gdb.selectFromProveedor();
 		if (proveedores.isEmpty())
 			System.out.println("No hay proveedores en la base de datos");
 		else
@@ -282,7 +286,7 @@ public class VistaConsola {
 	}
 
 	private void selectAllFromProducto() {
-		List<Producto> productos = gdb.selectAllFromProducto();
+		List<Producto> productos = gdb.selectFromProducto();
 		if (productos.isEmpty())
 			System.out.println("No hay productos en la base de datos");
 		else
@@ -324,7 +328,7 @@ public class VistaConsola {
 	}
 
 	private void selectAllFromDireccion() {
-		List<Direccion> direcciones = gdb.selectAllFromDireccion();
+		List<Direccion> direcciones = gdb.selectFromDireccion();
 		if (direcciones.isEmpty())
 			System.out.println("No hay DIRECCIONES en la base de datos");
 		else
@@ -373,11 +377,12 @@ public class VistaConsola {
 	}
 
 	private void insertCliente() {
+		Cliente cliente = new Cliente();
 		System.out.println("Ingrese el ID del cliente a insertar");
-		int idCliente = scan.nextInt();
+		cliente.setId(scan.nextInt());
 		System.out.println("Ingese el NOMBRE del cliente a insertar");
-		String nombre = scan.next();
-		Cliente cliente = new Cliente(idCliente,nombre);
+		cliente.setNombre(scan.next());
+		
 		int errorCode = cliente.persist();
 		switch(errorCode) {
 		case 0:
@@ -391,18 +396,18 @@ public class VistaConsola {
 	}
 
 	private void insertFactura() {
+		Factura factura = new Factura();
 		System.out.println("Ingrese el NRO de la factura a insertar");
-		int nroFactura = scan.nextInt();
+		factura.setNro(scan.nextInt());
 		System.out.println("Ingese el ID del cliente de la factura.");
-		int idCliente = scan.nextInt();
+		factura.setCliente(gdb.selectFromClienteWhere(scan.nextInt()));
 		System.out.println("Ingese el IMPORTE de la factura.");
-		byte estado = scan.nextByte();
+		factura.setImporte(scan.nextDouble());
 		System.out.println("Ingese el ESTADO de la factura.");
-		double importe = scan.nextDouble();
-		Cliente cliente = gdb.selectFromClienteWhere(idCliente);
-		Factura factura = new Factura(nroFactura,importe,estado,new Date(),cliente);
+		factura.setEstado(scan.nextByte());
+		factura.setFecha(new Date());
+		
 		int errorCode = factura.persist();
-
 		switch(errorCode) {
 		case 0:
 			System.out.println("Factura insertada correctamente");
@@ -414,22 +419,21 @@ public class VistaConsola {
 			System.out.println("Ya existe una factura con el NRO ingresado");
 			break;
 		}
-
 		returnMenuAnterior();
 	}
 
 	private void insertDetalle() {
+		Detalle detalle = new Detalle();
 		System.out.println("Ingresar el NRO del DETALLE");
-		Factura factura = gdb.selectFromFacturaWhere(scan.nextInt());
+		detalle.setFactura(gdb.selectFromFacturaWhere(scan.nextInt()));
 		System.out.println("Ingresar el ID del DETALLE");
-		Producto producto = gdb.selectFromProductoWhere(scan.nextInt());
+		detalle.setProducto(gdb.selectFromProductoWhere(scan.nextInt()));
 		System.out.println("Ingresar la CANTIDAD del DETALLE");
-		int cantidad = scan.nextInt();
+		detalle.setCantidad(scan.nextInt());
 		System.out.println("Ingresar el PRECIO del DETALLE");
-		double precio = scan.nextDouble();
-		Detalle detalle = new Detalle(factura,producto,cantidad,precio);
-		int errorCode = detalle.persist();
+		detalle.setPrecio(scan.nextDouble());
 		
+		int errorCode = detalle.persist();
 		switch(errorCode) {
 		case 0:
 			System.out.println("DETALLE insertado correctamente");
@@ -441,14 +445,15 @@ public class VistaConsola {
 			System.out.println("Ya existe un DETALLE con el NRO y ID ingresados");
 			break;
 		}
-
 		returnMenuAnterior();
 	}
+	
 	private void insertProveedor() {
+		Proveedor proveedor = new Proveedor();
 		System.out.println("Ingresar el ID del PROVEEDOR a insertar");
-		int idProveedor = scan.nextInt();
+		proveedor.setId(scan.nextInt());
 		System.out.println("Ingresar el NOMBRE del PROVEEDOR a insertar");
-		String nombre = scan.next();
+		proveedor.setNombre(scan.next());
 		int idProducto = -1;
 		List<Producto> productosQueProvee = null;
 		System.out.println("Ingresar el ID 0 para dejar de ingresar PRODUCTOS");
@@ -458,7 +463,8 @@ public class VistaConsola {
 			if (idProducto != 0)
 				productosQueProvee.add(gdb.selectFromProductoWhere(idProducto));
 		}
-		Proveedor proveedor = new Proveedor(idProveedor,nombre,productosQueProvee);
+		proveedor.setProductosQueProvee(productosQueProvee);
+		
 		int errorCode = proveedor.persist();
 		switch(errorCode) {
 		case 0:
@@ -491,6 +497,7 @@ public class VistaConsola {
 			System.out.println("Ya existe un PRODUCTO con el ID ingresado");
 			break;
 		}
+		returnMenuAnterior();
 	}
 	
 	private void insertDireccion() {
@@ -503,6 +510,7 @@ public class VistaConsola {
 		direccion.setNro(scan.nextInt());
 		System.out.println("Ingresar la LOCALIDAD de la DIRECCION");
 		direccion.setLocalidad(scan.next());
+		
 		int errorCode = direccion.persist();
 		switch (errorCode) {
 		case 0:
@@ -512,6 +520,7 @@ public class VistaConsola {
 			System.out.println("Ya existe una DIRECCION con el ID ingresado");
 			break;
 		}
+		returnMenuAnterior();
 	}
 
 	//
@@ -759,8 +768,6 @@ public class VistaConsola {
 		try {
 			System.in.read();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		clearScreen();
 

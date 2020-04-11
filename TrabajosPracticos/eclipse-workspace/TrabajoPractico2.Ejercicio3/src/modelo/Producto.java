@@ -4,25 +4,33 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="PRODUCTO")
+@Entity(name = "Producto")
+@Table(name = "PRODUCTO")
 public class Producto implements Serializable{
 	private static final long serialVersionUID = -882788105809591721L;
+	
 	@Id
-	@Column(nullable=false,name="ID")
+	@Column(nullable = false, name = "ID")
 	private int id;
-	@Column(nullable=false,name="DESCR",length=50)
+	
+	@Column(nullable = false, name = "DESCR", length = 50)
 	private String descr;
-	@Column(nullable=false,name="STOCK")
+	
+	@Column(nullable = false, name = "STOCK")
 	private int stock;
-	@Column(nullable=false,name="PRECIO_BASE")
+	
+	@Column(nullable = false, name = "PRECIO_BASE")
 	private double precioBase;
-	@Column(nullable=false,name="PRECIO_COSTO")
+	
+	@Column(nullable = false, name = "PRECIO_COSTO")
 	private double precioCosto;
+	
 	@ManyToMany
+	@JoinColumn(table = "PROD_PROV", name = "ID_PROVEEDOR", nullable = false)
 	private List<Proveedor> proveedores;
 	
 	public int persist() {

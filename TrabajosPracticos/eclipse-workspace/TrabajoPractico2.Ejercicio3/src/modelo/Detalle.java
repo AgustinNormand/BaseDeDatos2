@@ -5,24 +5,34 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="DETALLE")
+@Entity(name = "Detalle")
+@Table(name = "DETALLE")
+@NamedQueries({
+	@NamedQuery(name="SelectFromDetalle",query="SELECT d FROM Detalle d"),
+	//@NamedQuery(name="SelectFromDetalleWhere",query="SELECT d FROM Detalle d WHERE d.NRO LIKE :NRO")
+})
 public class Detalle implements Serializable{
 	private static final long serialVersionUID = 1545593860994203236L;
+	
 	@Id
-	@JoinColumn(nullable=false,name="NRO")
+	@JoinColumn(nullable = false, name = "NRO", table = "FACTURA")
 	@OneToOne
 	private Factura factura;
+	
 	@Id
-	@JoinColumn(nullable=false,name="ID")
+	@JoinColumn(nullable = false, name = "ID", table = "PRODUCTO")
 	@OneToOne
 	private Producto producto;
-	@Column(nullable=false,name="CANTIDAD")
+	
+	@Column(nullable = false, name = "CANTIDAD")
 	private int cantidad;
-	@Column(nullable=false,name="PRECIO")
+	
+	@Column(nullable = false, name = "PRECIO")
 	private double precio;
 	
 	public int persist () {
@@ -31,13 +41,6 @@ public class Detalle implements Serializable{
 	
 	public Detalle() {
 		
-	}
-	
-	public Detalle(Factura factura, Producto producto, int cantidad, double precio) {
-		this.factura = factura;
-		this.producto = producto;
-		this.cantidad = cantidad; 
-		this.precio = precio;
 	}
 	
 	public Factura getFactura() {

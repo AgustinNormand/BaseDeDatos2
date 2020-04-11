@@ -1,13 +1,17 @@
 package modelo;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
+@Entity(name = "Direccion")
 @Table(name = "DIRECCION")
-public class Direccion {
+public class Direccion implements Serializable{
+	private static final long serialVersionUID = -3220465368658502621L;
+
 	@Id
 	@Column(name = "ID")
 	private int id;

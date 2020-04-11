@@ -32,7 +32,7 @@ public class Gestor {
 	
 	/* OPERACIONES CON FACTURA */
 	@SuppressWarnings("unchecked")
-	public List<Factura> selectAllFromFactura(){
+	public List<Factura> selectFromFactura(){
 		EntityManager em = emf.createEntityManager();
 		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM FACTURA f").getResultList();
 		em.close();
@@ -58,7 +58,7 @@ public class Gestor {
 	
 	/* OPERACIONES CON DETALLE */
 	@SuppressWarnings("unchecked")
-	public List<Detalle> selectAllFromDetalle(){
+	public List<Detalle> selectFromDetalle(){
 		EntityManager em = emf.createEntityManager();
 		List<Detalle> detalles = (List<Detalle>)  em.createQuery("SELECT d FROM DETALLE d").getResultList();
 		em.close();
@@ -85,7 +85,7 @@ public class Gestor {
 	
 	/* OPERACIONES CON CLIENTE */
 	@SuppressWarnings("unchecked")
-	public List<Cliente> selectAllFromCliente(){
+	public List<Cliente> selectFromCliente(){
 		EntityManager em = emf.createEntityManager();
 		List<Cliente> clientes = (List<Cliente>)  em.createQuery("SELECT c FROM CLIENTE c").getResultList();
 		em.close();
@@ -111,7 +111,7 @@ public class Gestor {
 	
 	/* OPERACIONES CON PRODUCTO */
 	@SuppressWarnings("unchecked")
-	public List<Producto> selectAllFromProducto(){
+	public List<Producto> selectFromProducto(){
 		EntityManager em = emf.createEntityManager();
 		List<Producto> productos = (List<Producto>)  em.createQuery("SELECT p FROM PRODUCTO p").getResultList();
 		em.close();
@@ -137,7 +137,7 @@ public class Gestor {
 	
 	/* OPERACIONES CON PROVEEDOR */
 	@SuppressWarnings("unchecked")
-	public List<Proveedor> selectAllFromProveedor(){
+	public List<Proveedor> selectFromProveedor(){
 		EntityManager em = emf.createEntityManager();
 		List<Proveedor> proveedores = (List<Proveedor>)  em.createQuery("SELECT p FROM PROVEEDOR p").getResultList();
 		em.close();
@@ -163,7 +163,7 @@ public class Gestor {
 	
 	/* OPERACIONES CON DIRECCION */
 	@SuppressWarnings("unchecked")
-	public List<Direccion> selectAllFromDireccion(){
+	public List<Direccion> selectFromDireccion(){
 		EntityManager em = emf.createEntityManager();
 		List<Direccion> direcciones = (List<Direccion>)  em.createQuery("SELECT d FROM DIRECCION d").getResultList();
 		em.close();
@@ -186,4 +186,8 @@ public class Gestor {
 		return 0;
 	}
 	/* FIN DE OPERACIONES CON DIRECCION */
+	
+	public void close() {
+		emf.close();
+	}
 }

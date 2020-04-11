@@ -8,22 +8,27 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="FACTURA")
+@Entity(name = "Factura")
+@Table(name = "FACTURA")
 public class Factura implements Serializable{
 	private static final long serialVersionUID = 619903870720941971L;
+	
 	@Id
 	//@GeneratedValue(strategy=GenerationType.IDENTITY,generator = "GEN_NRO_FACTURA")
-	@Column(nullable=false,name="NRO",columnDefinition="INTEGER")
+	@Column(nullable = false, name = "NRO"/*, columnDefinition = "INTEGER"*/)
 	private int nro;
-	@Column(nullable=false,name="IMPORTE",columnDefinition="DOUBLE")
+	
+	@Column(nullable = false, name = "IMPORTE"/*, columnDefinition = "DOUBLE"*/)
 	private double importe;
-	@Column(nullable=false,name="ESTADO",columnDefinition="INTEGER")
+	
+	@Column(nullable = false, name = "ESTADO"/*, columnDefinition = "INTEGER"*/)
 	private byte estado;
-	@Column(nullable=false,name="FECHA",columnDefinition="DATE DEFAULT CURRENT_DATE")
+	
+	@Column(nullable = false, name = "FECHA"/*, columnDefinition = "DATE DEFAULT CURRENT_DATE"*/)
 	private Date fecha;
+	
 	@ManyToOne
-	@JoinColumn(name="ID_CLIENTE")
+	@JoinColumn(name = "ID_CLIENTE", table = "CLIENTE")
 	private Cliente cliente;
 	
 	public int persist() {
@@ -33,15 +38,7 @@ public class Factura implements Serializable{
 	public Factura() {
 		
 	}
-	
-	public Factura(int nro, double importe, byte estado, Date fecha, Cliente cliente) {
-		this.nro = nro;
-		this.importe = importe;
-		this.estado = estado;
-		this.fecha = fecha;
-		this.cliente = cliente;
-	}
-	
+
 	public int getNro() {
 		return nro;
 	}
