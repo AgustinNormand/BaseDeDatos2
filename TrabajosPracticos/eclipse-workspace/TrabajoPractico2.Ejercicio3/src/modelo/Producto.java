@@ -34,7 +34,7 @@ public class Producto implements Serializable{
 	@JoinColumn(table = "PROD_PROV", name = "ID_PROVEEDOR", nullable = false)
 	private List<Proveedor> proveedores;
 	
-	@OneToMany(mappedBy = "id")
+	@OneToMany(mappedBy = "producto")
 	private List<Detalle> detalles;
 	
 	public int persist() {

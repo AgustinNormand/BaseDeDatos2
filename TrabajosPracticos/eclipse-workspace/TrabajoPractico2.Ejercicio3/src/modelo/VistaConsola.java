@@ -118,7 +118,7 @@ public class VistaConsola {
 	private void selectAllFromCliente() {
 		List<Cliente> clientes = gdb.selectFromCliente();
 		if (clientes.isEmpty())
-			System.out.println("No hay clientes en la base de datos");
+			System.out.println("No hay Clientes en la base de datos");
 		else
 			for (Cliente cliente : clientes) 
 				System.out.println(cliente);
@@ -160,7 +160,7 @@ public class VistaConsola {
 	private void selectAllFromFactura(){
 		List<Factura> facturas = gdb.selectFromFactura();
 		if (facturas.isEmpty())
-			System.out.println("No hay facturas en la base de datos");
+			System.out.println("No hay Facturas en la base de datos");
 		else
 			for (Factura factura : facturas) 
 				System.out.println(factura);
@@ -204,7 +204,7 @@ public class VistaConsola {
 	private void selectAllFromDetalle() {
 		List<Detalle> detalles = gdb.selectFromDetalle();
 		if (detalles.isEmpty())
-			System.out.println("No hay detalles en la base de datos");
+			System.out.println("No hay Detalles en la base de datos");
 		else
 			for (Detalle detalle : detalles) 
 				System.out.println(detalle);
@@ -246,7 +246,7 @@ public class VistaConsola {
 	private void selectAllFromProveedor() {
 		List<Proveedor> proveedores = gdb.selectFromProveedor();
 		if (proveedores.isEmpty())
-			System.out.println("No hay proveedores en la base de datos");
+			System.out.println("No hay Proveedores en la base de datos");
 		else
 			for (Proveedor proveedor : proveedores) 
 				System.out.println(proveedor);
@@ -288,7 +288,7 @@ public class VistaConsola {
 	private void selectAllFromProducto() {
 		List<Producto> productos = gdb.selectFromProducto();
 		if (productos.isEmpty())
-			System.out.println("No hay productos en la base de datos");
+			System.out.println("No hay Productos en la base de datos");
 		else
 			for (Producto producto : productos) 
 				System.out.println(producto);
@@ -330,7 +330,7 @@ public class VistaConsola {
 	private void selectAllFromDireccion() {
 		List<Direccion> direcciones = gdb.selectFromDireccion();
 		if (direcciones.isEmpty())
-			System.out.println("No hay DIRECCIONES en la base de datos");
+			System.out.println("No hay Direcciones en la base de datos");
 		else
 			for (Direccion direccion : direcciones) 
 				System.out.println(direccion);
@@ -378,10 +378,12 @@ public class VistaConsola {
 
 	private void insertCliente() {
 		Cliente cliente = new Cliente();
-		System.out.println("Ingrese el ID del cliente a insertar");
+		System.out.println("Ingresar el ID del cliente a insertar");
 		cliente.setId(scan.nextInt());
-		System.out.println("Ingese el NOMBRE del cliente a insertar");
+		System.out.println("Ingesar el NOMBRE del cliente a insertar");
 		cliente.setNombre(scan.next());
+		System.out.println("Ingresar el ID de la DIRECCION del cliente a insertar");
+		cliente.setDireccion(gdb.selectFromDireccionWhere(scan.nextInt()));
 		
 		int errorCode = cliente.persist();
 		switch(errorCode) {

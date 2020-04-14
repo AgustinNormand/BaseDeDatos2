@@ -1,0 +1,19 @@
+Puedo usar el When como un TRY Catch, capturar los errores y hacer algo al respecto.
+
+Cada WHEN captura los errores del BLOQUE BEGIN END en el que se encuentra, pero no en un bloque BEGIN END mas PROFUNDO.
+
+BEGIN
+   IF
+   BEGIN
+      WHEN  2
+   END
+WHEN 1
+END
+
+El WHEN 1 captura los errores del IF que no haya capturado el WHEN 2
+
+El WHEN 2 no captura los errores del bloque BEGIN END "GRANDE"
+
+WHEN EXCEPTION SARASA DO BEGIN ARREGLO LO QUE PASÓ END
+
+Si un error no es tratado con un when, tira error.

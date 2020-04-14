@@ -34,7 +34,7 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Factura> selectFromFactura(){
 		EntityManager em = emf.createEntityManager();
-		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM FACTURA f").getResultList();
+		List<Factura> facturas = (List<Factura>)  em.createQuery("SELECT f FROM Factura f").getResultList();
 		em.close();
 		return facturas;
 	}
@@ -60,7 +60,7 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Detalle> selectFromDetalle(){
 		EntityManager em = emf.createEntityManager();
-		List<Detalle> detalles = (List<Detalle>)  em.createQuery("SELECT d FROM DETALLE d").getResultList();
+		List<Detalle> detalles = (List<Detalle>)  em.createQuery("SELECT d FROM Detalle d").getResultList();
 		em.close();
 		return detalles;
 	}
@@ -68,7 +68,7 @@ public class Gestor {
 	public Detalle selectFromDetalleWhere(int nro, int id) {
 		EntityManager em = emf.createEntityManager();
 		//Detalle detalle = em.find(Detalle.class,nro,id);
-		Detalle detalle = (Detalle) em.createQuery("SELECT d FROM DETALLE d WHERE ID = "+id+" AND NRO = "+nro);
+		Detalle detalle = (Detalle) em.createQuery("SELECT d FROM Detalle d WHERE ID = "+id+" AND NRO = "+nro);
 		return detalle;
 	}
 	
@@ -87,7 +87,7 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Cliente> selectFromCliente(){
 		EntityManager em = emf.createEntityManager();
-		List<Cliente> clientes = (List<Cliente>)  em.createQuery("SELECT c FROM CLIENTE c").getResultList();
+		List<Cliente> clientes = (List<Cliente>)  em.createQuery("SELECT c FROM Cliente c").getResultList();
 		em.close();
 		return clientes;
 	}
@@ -113,7 +113,7 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Producto> selectFromProducto(){
 		EntityManager em = emf.createEntityManager();
-		List<Producto> productos = (List<Producto>)  em.createQuery("SELECT p FROM PRODUCTO p").getResultList();
+		List<Producto> productos = (List<Producto>)  em.createQuery("SELECT p FROM Producto p").getResultList();
 		em.close();
 		return productos;
 	}
@@ -139,7 +139,7 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Proveedor> selectFromProveedor(){
 		EntityManager em = emf.createEntityManager();
-		List<Proveedor> proveedores = (List<Proveedor>)  em.createQuery("SELECT p FROM PROVEEDOR p").getResultList();
+		List<Proveedor> proveedores = (List<Proveedor>)  em.createQuery("SELECT p FROM Proveedor p").getResultList();
 		em.close();
 		return proveedores;
 	}
@@ -165,7 +165,7 @@ public class Gestor {
 	@SuppressWarnings("unchecked")
 	public List<Direccion> selectFromDireccion(){
 		EntityManager em = emf.createEntityManager();
-		List<Direccion> direcciones = (List<Direccion>)  em.createQuery("SELECT d FROM DIRECCION d").getResultList();
+		List<Direccion> direcciones = (List<Direccion>)  em.createQuery("SELECT d FROM Direccion d").getResultList();
 		em.close();
 		return direcciones;
 	}
