@@ -9,11 +9,27 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedStoredProcedureQueries;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity(name = "Factura")
 @Table(name = "FACTURA")
+/*@NamedStoredProcedureQueries({
+	@NamedStoredProcedureQuery(
+		name = "spFactura",
+		procedureName = "SP_FACTURA",
+		parameters = {
+				
+				
+		}
+			)
+	
+	
+	
+})
+*/
 public class Factura implements Serializable{
 	private static final long serialVersionUID = 619903870720941971L;
 	

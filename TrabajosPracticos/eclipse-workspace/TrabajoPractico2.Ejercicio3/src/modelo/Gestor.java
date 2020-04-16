@@ -1,8 +1,11 @@
 package modelo;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.ParameterMode;
 import javax.persistence.Persistence;
+import javax.persistence.StoredProcedureQuery;
 
 public class Gestor {
 	
@@ -12,6 +15,7 @@ public class Gestor {
 	
 	private Gestor() {
 		emf = Persistence.createEntityManagerFactory("database");
+		this.persist(new Object());
 	}
 	
 	public static Gestor getInstance() {
@@ -23,10 +27,32 @@ public class Gestor {
 	
 	public int persist(Object entity){
 		EntityManager em = emf.createEntityManager();
-		int errorCode = 0;
 		em.getTransaction().begin();
-		em.persist(entity);
-		em.getTransaction().commit();
+		StoredProcedureQuery query = em.createStoredProcedureQuery( "SP_FACTURA");
+		query.registerStoredProcedureParameter(1, Character.class, ParameterMode.IN);
+		query.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
+		query.registerStoredProcedureParameter(3, Date.class, ParameterMode.IN);
+		query.registerStoredProcedureParameter(4, Integer.class, ParameterMode.IN);
+		query.setParameter(1,'I');
+		query.setParameter(2,5);
+		query.setParameter(3,new Date());
+		query.setParameter(4, 10);
+		try {
+			query.execute();	
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			System.out.println(e.getLocalizedMessage());
+			System.out.println(e.hashCode());
+			System.out.println(e.getCause());
+			em.getTransaction().rollback();
+		}
+		
+		int errorCode = 0;
+
+		//em.persist(entity);
+		//em.getTransaction().commit();
+		em.close();
+		
 		return errorCode; //Missing to code this
 	}
 	
