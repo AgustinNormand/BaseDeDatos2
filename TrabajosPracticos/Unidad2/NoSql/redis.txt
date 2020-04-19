@@ -1,0 +1,55 @@
+List databases:
+CONFIG GET databases
+
+Select one database:
+SELECT index
+Ej: Select 1
+
+Establecer un valor a una clave
+SET CLAVE VALOR
+Ej: SET nombre Agustin
+
+Agregar un valor a una clave
+APPEND CLAVE VALOR
+Ej: APPEND nombre Normand
+
+Insertar un valor en una lista
+LPUSH CLAVE VALOR
+Ej: LPUSH prog-leng Pascal
+
+LPUSH inserta en la Cabeza.
+RPUSH inserta en la Cola.
+
+Insertar valores en un conjunto ordenado.
+ZADD CLAVE PUNTAJE VALOR
+Ej: ZADD animales 0 rata
+
+Obtener el valor de una clave
+GET CLAVE
+Ej: GET nombre
+
+Obtener los valores de una lista.
+LINDEX CLAVE INDICE
+LRANGE CLAVE VALORDESDE VALORHASTA
+
+Obtener los valores de un conjunto ordenado
+ZRANGE CLAVE VALORDESDE VALORHASTA
+
+Renombrar una clave:
+RENAME CLAVE NUEVACLAVE
+
+Incremetar el valor de una clave
+INCR edad
+
+Obtener el tipo de dato almacenado en el valor de una clave
+TYPE CLAVE
+Ej: TYPE fechanac
+
+Mostrar los elementos en un rango de puntajes
+ZRANGEBYSCORE CLAVE VALORDESDE VALORHASTA
+Ej: ZRANGEBYSCORE animales 50 100
+
+Eliminar el elemento con menor puntaje de un conjunto
+ZPOPMIN CLAVE
+
+
