@@ -52,4 +52,9 @@ Ej: ZRANGEBYSCORE animales 50 100
 Eliminar el elemento con menor puntaje de un conjunto
 ZPOPMIN CLAVE
 
+Configurar una contraseña para la DB
+CONFIG SET requiepass "PASSWORD"
+
+Autenticarse
+AUTH password
 
