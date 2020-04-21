@@ -58,3 +58,7 @@ CONFIG SET requiepass "PASSWORD"
 Autenticarse
 AUTH password
 
+Verificar la existencia de una clave
+EXIST CLAVE
+Devuelve 1 si existe, 0 si no.
+Ej: Exists agustin
