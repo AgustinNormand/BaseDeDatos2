@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import controlador.Gestor;
 @Entity(name = "Proveedor")
 @Table(name = "PROVEEDOR")
 public class Proveedor implements Serializable{

@@ -13,6 +13,15 @@ public class Helper {
         u.setPassword("perez");
         return u;
     }
+    public static <Optional>Usuario OPCIONAL_JUAN_PEREZ(){
+        Usuario u = new Usuario();
+        u.setApellido("Perez");
+        u.setNombre("Juan");
+        u.setDni("33.333.333");
+        u.setEmail("juan@perez.com");
+        u.setPassword("perez");
+        return u;
+    }
 
     public static Usuario PITY_MARTINEZ(){
         Usuario u = new Usuario();

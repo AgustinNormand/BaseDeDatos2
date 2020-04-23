@@ -14,6 +14,8 @@ import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import controlador.Gestor;
+
 @Entity(name = "Factura")
 @Table(name = "FACTURA")
 /*@NamedStoredProcedureQueries({

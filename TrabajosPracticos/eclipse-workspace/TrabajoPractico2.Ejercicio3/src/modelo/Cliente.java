@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import controlador.Gestor;
 @Entity(name = "Cliente")
 @Table(name = "Cliente")
 public class Cliente implements Serializable{

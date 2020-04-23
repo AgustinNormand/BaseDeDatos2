@@ -1,6 +1,7 @@
 package com.bd2.unidad2.repository.impl;
 
 import com.bd2.unidad2.repository.LoginDao;
+import com.bd2.unidad2.repository.exceptions.IncorrectToken;
 import com.bd2.unidad2.repository.exceptions.LoginError;
 import com.bd2.unidad2.repository.utils.TokenGenerator;
 
@@ -31,8 +32,17 @@ public class LoginDaoImpl implements LoginDao {
 
 	@Override
 	public void logout(String token) {
-		// TODO Auto-generated method stub
-
+		Boolean encontrado = false;
+		String mail = null;
+		for (String clave : con.keys("*")) {
+			if (token.equals(con.hget(clave, "Token"))){
+				mail = con.hget(clave, "Email");
+				con.hset(mail, "Token", "");
+				encontrado = true;
+				break;
+			}
+		}
+		if (!encontrado)
+			throw new IncorrectToken("El token ingresado no existe");
 	}
-
 }

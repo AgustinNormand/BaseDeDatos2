@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import controlador.Gestor;
+
 @Entity(name = "Direccion")
 @Table(name = "DIRECCION")
 public class Direccion implements Serializable{

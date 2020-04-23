@@ -17,8 +17,8 @@ public class Usuario {
   private String dni;
   private String email;
   private String password;
-  private Boolean mailValidated;
-  private String createdAt;
+  private Boolean mailValidated = false;
+  private String createdAt = "";
   private String estado;
 
   public Usuario() {
@@ -126,7 +126,6 @@ public class Usuario {
         ", password='" + password + '\'' +
         ", mailValidated=" + mailValidated +
         ", createdAt='" + createdAt + '\'' +
-        ", estado='" + estado +'\'' +
         '}';
   }
 }

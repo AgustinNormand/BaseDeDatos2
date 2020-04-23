@@ -9,6 +9,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import controlador.Gestor;
+
 @Entity(name = "Producto")
 @Table(name = "PRODUCTO")
 public class Producto implements Serializable{

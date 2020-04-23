@@ -67,7 +67,8 @@ public class VistaConsola {
 		int opcionMenuSelectCliente = -1;
 		while (opcionMenuSelectCliente != 0) {
 			System.out.println("1) Select * From Cliente");
-			System.out.println("2) Select * From Cliente Where ...");
+			System.out.println("2) Select * From Cliente Where ID = ...");
+			System.out.println("3) Select * From Cliente Where ID > ... AND ID < ...");
 			System.out.println("0) Volver");
 			opcionMenuSelectCliente = scan.nextInt();
 			clearScreen();
@@ -78,8 +79,26 @@ public class VistaConsola {
 			case 2:
 				selectCliente();
 				break;
+			case 3:
+				selectClientesInRange();
+				break;
 			}
 		}
+	}
+
+	private void selectClientesInRange() {
+		System.out.println("Ingese el ID DESDE");
+		int idDesde = scan.nextInt();
+		System.out.println("Ingese el ID HASTA");
+		int idHasta = scan.nextInt();
+		ArrayList<Cliente> clientes = gdb.selectClientesInRange(idDesde,idHasta);
+		
+		if (clientes.isEmpty())
+			System.out.println("No hay clientes en dicho rango de ID");
+		else
+			for (Cliente cliente : clientes)
+				System.out.println(cliente.toString());
+		returnMenuAnterior();
 	}
 
 	public void selectCliente() {
@@ -109,7 +128,10 @@ public class VistaConsola {
 		int opcionMenuSelectFactura = -1;
 		while (opcionMenuSelectFactura != 0) {
 			System.out.println("1) Select * From Factura");
-			System.out.println("2) Select * From Factura Where ...");
+			System.out.println("2) Select * From Factura Where NRO = ...");
+			System.out.println("3) Select * From Factura Where NRO >= ... AND NRO <= ...");
+			System.out.println("4) Select * From Factura Where ID = ...");
+			System.out.println("5) Select * From Factura Where Importe >= ...");
 			System.out.println("0) Volver");
 			opcionMenuSelectFactura = scan.nextInt();
 			clearScreen();
@@ -120,10 +142,60 @@ public class VistaConsola {
 			case 2:
 				selectFactura();
 				break;
+			case 3:
+				selectFacturasInRange();
+				break;
+			case 4:
+				selectFacturasFromId();
+				break;
+			case 5:
+				selectFacturasFromImporte();
+				break;
 			}
 		}
 	}
 	
+	private void selectFacturasFromImporte() {
+		System.out.println("Ingrese el IMPORTE de las facturas a buscar");
+		int importe = scan.nextInt();
+		ArrayList<Factura> facturas = gdb.selectFacturasFromImporte(importe);
+		if (facturas.isEmpty())
+			System.out.println("No se encontraron facturas con IMPORTE mayor o igual al indicado");
+		else
+			for (Factura factura : facturas) 
+				System.out.println(factura.toString());
+		returnMenuAnterior();
+		
+	}
+
+	private void selectFacturasFromId() {
+		System.out.println("Ingrese el ID de las facturas a buscar");
+		int idCliente = scan.nextInt();
+		ArrayList<Factura> facturas = gdb.selectFacturasFromId(idCliente);
+		if (facturas.isEmpty())
+			System.out.println("No se encontraron facturas con el ID indicado");
+		else
+			for (Factura factura : facturas) 
+				System.out.println(factura.toString());
+		returnMenuAnterior();
+		
+	}
+
+	private void selectFacturasInRange() {
+		System.out.println("Ingese el NRO DESDE");
+		int nroDesde = scan.nextInt();
+		System.out.println("Ingese el NRO HASTA");
+		int nroHasta = scan.nextInt();
+		ArrayList<Factura> facturas = gdb.selectFacturasInRange(nroDesde,nroHasta);
+		
+		if (facturas.isEmpty())
+			System.out.println("No hay facturas en dicho rango de NRO");
+		else
+			for (Factura factura : facturas)
+				System.out.println(factura.toString());
+		returnMenuAnterior();		
+	}
+
 	public void selectFactura() {
 		System.out.println("Ingese el NRO de la factura a buscar");
 		int nroFactura = scan.nextInt();

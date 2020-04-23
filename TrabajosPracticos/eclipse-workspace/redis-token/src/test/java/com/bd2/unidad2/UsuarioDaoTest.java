@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.bd2.unidad2.Helper.JUAN_PEREZ;
+import static com.bd2.unidad2.Helper.OPCIONAL_JUAN_PEREZ;
+
 import static com.bd2.unidad2.Helper.PITY_MARTINEZ;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -389,7 +391,7 @@ public class UsuarioDaoTest {
     }
     
     private void entoncesElOptionalUsuarioEsJuanPerez() {
-        assertEquals(this.optionalUsuario, JUAN_PEREZ());
+        assertEquals(this.optionalUsuario.toString(), JUAN_PEREZ().toString());
     }
 
     private void cuandoPidousuarioPorMail(String email) {

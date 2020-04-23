@@ -2,3 +2,4 @@
 target/*
 out/*
 redis-token.iml
+/target/

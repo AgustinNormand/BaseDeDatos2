@@ -30,6 +30,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			con.hset(usuario.getEmail(),"Password", usuario.getPassword());
 			con.hset(usuario.getEmail(), "Estado", "Activo");
 			con.hset(usuario.getEmail(), "Token", "");
+			//con.hset(usuario.getEmail(), "Conexiones", );
 			con.expire(usuario.getEmail(), 70560*60);
 			usuarioReturn = new Usuario(con.hgetall(usuario.getEmail()),con.ttl(usuario.getEmail())==-1);
 			}
@@ -88,8 +89,10 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			con.hset(usuario.getEmail(),"Dni", usuario.getDni());
 			con.hset(usuario.getEmail(),"Nombre", usuario.getNombre());
 			con.hset(usuario.getEmail(),"Apellido", usuario.getApellido());
-			con.hset(usuario.getEmail(),"CreatedAt", usuario.getCreatedAt());
+			con.hset(usuario.getEmail(),"CreatedAt", "");
 			con.hset(usuario.getEmail(),"Password", usuario.getPassword());
+			con.hset(usuario.getEmail(),"mailValidated", "");
+			
 			usuarioReturn = new Usuario(
 									con.hgetall(usuario.getEmail())
 								    ,con.ttl(usuario.getEmail())==-1
@@ -125,7 +128,15 @@ public class UsuarioDaoImpl implements UsuarioDao{
 
 	@Override
 	public Optional<Usuario> getByDni(String dni) {
-		return Optional.ofNullable(new Usuario());
+		Usuario usuarioReturn = null;
+		for (String clave : con.keys("*")) {
+			if (dni.equals(con.hget(clave, "Dni"))){
+				String email = con.hget(clave, "Email");
+				usuarioReturn = new Usuario(con.hgetall(email),con.pttl(email)==-1);
+				break;
+			}
+		}
+		return Optional.ofNullable(usuarioReturn);
 	}
 
 }

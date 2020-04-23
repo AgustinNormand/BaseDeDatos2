@@ -156,4 +156,44 @@ public class Gestor {
 	public int dropDatabase() {
 		return db.drop();
 	}
+
+	public ArrayList<Cliente> selectClientesInRange(int idDesde, int idHasta) {
+		ArrayList<Cliente> clientesReturn = new ArrayList<>();
+		ArrayList<Cliente> clientes = db.selectAllClientes();
+		for (Cliente cliente : clientes) {
+			int idCliente = cliente.getId();
+			if (idCliente >= idDesde && idCliente <= idHasta) 
+				clientesReturn.add(new Cliente(cliente.getId(),cliente.getDescr()));
+		}
+		return clientesReturn;
+	}
+
+	public ArrayList<Factura> selectFacturasInRange(int nroDesde, int nroHasta) {
+		ArrayList<Factura> facturasReturn = new ArrayList<>();
+		ArrayList<Factura> facturas = db.selectAllFacturas();
+		for (Factura factura : facturas) {
+			int nroFactura = factura.getNro();
+			if (nroFactura >= nroDesde && nroFactura <= nroHasta) 
+				facturasReturn.add(new Factura(factura.getNro(),factura.getId(),factura.getImporte()));
+		}
+		return facturasReturn;
+	}
+
+	public ArrayList<Factura> selectFacturasFromId(int idCliente) {
+		ArrayList<Factura> facturasReturn = new ArrayList<>();
+		ArrayList<Factura> facturas = db.selectAllFacturas();
+		for (Factura factura : facturas) 
+			if (factura.getId() == idCliente)
+				facturasReturn.add(new Factura(factura.getNro(),factura.getId(),factura.getImporte()));
+		return facturasReturn;
+	}
+
+	public ArrayList<Factura> selectFacturasFromImporte(int importe) {
+		ArrayList<Factura> facturasReturn = new ArrayList<>();
+		ArrayList<Factura> facturas = db.selectAllFacturas();
+		for (Factura factura : facturas) 
+			if (factura.getImporte() >= importe)
+				facturasReturn.add(new Factura(factura.getNro(),factura.getId(),factura.getImporte()));
+		return facturasReturn;
+	}
 }

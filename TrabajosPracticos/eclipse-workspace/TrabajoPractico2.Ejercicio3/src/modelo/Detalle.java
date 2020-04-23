@@ -12,6 +12,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import controlador.Gestor;
+
 @Entity(name = "Detalle")
 @Table(name = "DETALLE")
 @NamedQueries({
