@@ -1,8 +1,11 @@
 package controlador;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
+
 import modelo.Cliente;
 import modelo.Detalle;
 import modelo.Factura;
@@ -11,34 +14,45 @@ import modelo.Producto;
 import modelo.Direccion;
 
 public class Gestor {
-	
+
 	private static Gestor singleInstance = null;
 
 	private EntityManagerFactory emf = null;
 	
+	private static String errorMessage = "";
+
 	private Gestor() {
 		emf = Persistence.createEntityManagerFactory("database");
-		this.persist(new Object());
+	}
+
+	public static String getErrorMessage() {
+		return errorMessage;
 	}
 	
 	public static Gestor getInstance() {
 		if (singleInstance == null)
-				singleInstance = new Gestor();
-		
+			singleInstance = new Gestor();
+
 		return singleInstance;
 	}
-	
+
 	public int persist(Object entity){
 		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		em.persist(entity);
-		em.getTransaction().commit();
-		em.close();
-		
+		try {
+			em.persist(entity);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			errorCode = 1;
+			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
 		return errorCode; //Missing to code this
 	}
-	
+
 	/* OPERACIONES CON FACTURA */
 	@SuppressWarnings("unchecked")
 	public List<Factura> selectFromFactura(){
@@ -47,24 +61,40 @@ public class Gestor {
 		em.close();
 		return facturas;
 	}
-	
+
 	public Factura selectFromFacturaWhere(int nro) {
+		Factura factura = null;
 		EntityManager em = emf.createEntityManager();
-		Factura factura = em.find(Factura.class, nro);
+		try {
+			factura = em.find(Factura.class, nro);	
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+		}
 		return factura;
 	}
-	
+
 	public int deleteFromFacturaWhere(Factura factura) {
+		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		factura = em.merge(factura);
-		em.remove(factura);
-		em.getTransaction().commit();
-		em.close();
-		return 0;
+		try {
+			factura = em.merge(factura);
+			em.remove(factura);
+			em.getTransaction().commit();
+		} catch (IllegalArgumentException iae) {
+			errorCode = 1;
+			errorMessage = "La factura a eliminar no existe en la base de datos";
+		} catch (Exception e) {
+			errorCode = 1;
+			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
 	}
 	/* FIN DE OPERACIONES CON FACTURA */
-	
+
 	/* OPERACIONES CON DETALLE */
 	@SuppressWarnings("unchecked")
 	public List<Detalle> selectFromDetalle(){
@@ -73,25 +103,36 @@ public class Gestor {
 		em.close();
 		return detalles;
 	}
-	
+
 	public Detalle selectFromDetalleWhere(int nro, int id) {
 		EntityManager em = emf.createEntityManager();
 		//Detalle detalle = em.find(Detalle.class,nro,id);
-		Detalle detalle = (Detalle) em.createQuery("SELECT d FROM Detalle d WHERE ID = "+id+" AND NRO = "+nro);
+		Detalle detalle = (Detalle) em.createQuery("SELECT d FROM Detalle d WHERE d.producto = "+id+" AND d.factura = "+nro); 
 		return detalle;
 	}
-	
+
 	public int deleteFromDetalleWhere(Detalle detalle) {
+		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		detalle = em.merge(detalle);
-		em.remove(detalle);
-		em.getTransaction().commit();
-		em.close();
-		return 0;
+		try {
+			detalle = em.merge(detalle);
+			em.remove(detalle);
+			em.getTransaction().commit();
+		} catch (IllegalArgumentException iae) {
+			errorCode = 1;
+			errorMessage = "El detalle a eliminar no existe en la base de datos";
+		} catch (Exception e) {
+			errorCode = 1;
+			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
 	}
 	/* FIN DE OPERACIONES CON DETALLE */
-	
+
 	/* OPERACIONES CON CLIENTE */
 	@SuppressWarnings("unchecked")
 	public List<Cliente> selectFromCliente(){
@@ -100,24 +141,40 @@ public class Gestor {
 		em.close();
 		return clientes;
 	}
-	
+
 	public Cliente selectFromClienteWhere(int idCliente) {
+		Cliente cliente = null;
 		EntityManager em = emf.createEntityManager();
-		Cliente cliente = em.find(Cliente.class, idCliente);
+		try {
+			cliente = (Cliente) em.createQuery("SELECT c FROM Cliente c WHERE c.id = "+idCliente).getSingleResult();	
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+		}
 		return cliente;
 	}
-	
+
 	public int deleteFromClienteWhere(Cliente cliente) {
+		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		cliente = em.merge(cliente);
-		em.remove(cliente);
-		em.getTransaction().commit();
-		em.close();
-		return 0;
+		try {
+			cliente = em.merge(cliente);
+			em.remove(cliente);
+			em.getTransaction().commit();
+		} catch (IllegalArgumentException iae) {
+			errorCode = 1;
+			errorMessage = "El cliente a eliminar no existe en la base de datos";
+		} catch (Exception e) {
+			errorCode = 1;
+			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
 	}
 	/* FIN DE OPERACIONES CON CLIENTE */
-	
+
 	/* OPERACIONES CON PRODUCTO */
 	@SuppressWarnings("unchecked")
 	public List<Producto> selectFromProducto(){
@@ -126,24 +183,40 @@ public class Gestor {
 		em.close();
 		return productos;
 	}
-	
+
 	public Producto selectFromProductoWhere(int idProducto) {
+		Producto producto = null;
 		EntityManager em = emf.createEntityManager();
-		Producto producto = em.find(Producto.class, idProducto);
+		try {
+			producto = (Producto) em.createQuery("SELECT p FROM Producto p WHERE p.id = "+idProducto).getSingleResult();
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+		}
 		return producto;
 	}
-	
+
 	public int deleteFromProductoWhere(Producto producto) {
+		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		producto = em.merge(producto);
-		em.remove(producto);
-		em.getTransaction().commit();
-		em.close();
-		return 0;
+		try {
+			producto = em.merge(producto);
+			em.remove(producto);
+			em.getTransaction().commit();
+		} catch (IllegalArgumentException iae) {
+			errorCode = 1;
+			errorMessage = "El producto a eliminar no existe en la base de datos";
+		} catch (Exception e) {
+			errorCode = 1;
+			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
 	}
 	/* FIN DE OPERACIONES CON PRODUCTO */
-	
+
 	/* OPERACIONES CON PROVEEDOR */
 	@SuppressWarnings("unchecked")
 	public List<Proveedor> selectFromProveedor(){
@@ -152,24 +225,35 @@ public class Gestor {
 		em.close();
 		return proveedores;
 	}
-	
+
 	public Proveedor selectFromProveedorWhere(int idProveedor) {
 		EntityManager em = emf.createEntityManager();
 		Proveedor proveedor = em.find(Proveedor.class, idProveedor);
 		return proveedor;
 	}
-	
+
 	public int deleteFromProveedorWhere(Proveedor proveedor) {
+		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		proveedor = em.merge(proveedor);
-		em.remove(proveedor);
-		em.getTransaction().commit();
-		em.close();
-		return 0;
+		try {
+			proveedor = em.merge(proveedor);
+			em.remove(proveedor);
+			em.getTransaction().commit();
+		} catch (IllegalArgumentException iae) {
+			errorCode = 1;
+			errorMessage = "El proveedor a eliminar no existe en la base de datos";
+		} catch (Exception e) {
+			errorCode = 1;
+			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
 	}
 	/* FIN DE OPERACIONES CON PROVEEDOR */
-	
+
 	/* OPERACIONES CON DIRECCION */
 	@SuppressWarnings("unchecked")
 	public List<Direccion> selectFromDireccion(){
@@ -178,48 +262,36 @@ public class Gestor {
 		em.close();
 		return direcciones;
 	}
-	
+
 	public Direccion selectFromDireccionWhere(int idDireccion) {
 		EntityManager em = emf.createEntityManager();
 		Direccion direccion = em.find(Direccion.class, idDireccion);
 		return direccion;
 	}
-	
+
 	public int deleteFromDireccionWhere(Direccion direccion) {
+		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
-		direccion = em.merge(direccion);
-		em.remove(direccion);
-		em.getTransaction().commit();
-		em.close();
-		return 0;
+		try {
+			direccion = em.merge(direccion);
+			em.remove(direccion);
+			em.getTransaction().commit();
+		} catch (IllegalArgumentException iae) {
+			errorCode = 1;
+			errorMessage = "La direccion a eliminar no existe en la base de datos";
+		} catch (Exception e) {
+			errorCode = 1;
+			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
 	}
 	/* FIN DE OPERACIONES CON DIRECCION */
-	
+
 	public void close() {
 		emf.close();
 	}
-	
-	/*	IMPLEMENTACION CON DB MODELO B
-	 * 	EntityManager em = emf.createEntityManager();
-		em.getTransaction().begin();
-		StoredProcedureQuery query = em.createStoredProcedureQuery( "SP_FACTURA");
-		query.registerStoredProcedureParameter(1, Character.class, ParameterMode.IN);
-		query.registerStoredProcedureParameter(2, Integer.class, ParameterMode.IN);
-		query.registerStoredProcedureParameter(3, Date.class, ParameterMode.IN);
-		query.registerStoredProcedureParameter(4, Integer.class, ParameterMode.IN);
-		query.setParameter(1,'I');
-		query.setParameter(2,5);
-		query.setParameter(3,new Date());
-		query.setParameter(4, 10);
-		try {
-			query.execute();	
-			em.getTransaction().commit();
-		} catch (Exception e) {
-			System.out.println(e.getLocalizedMessage());
-			System.out.println(e.hashCode());
-			System.out.println(e.getCause());
-			em.getTransaction().rollback();
-		}
-	 * */
 }

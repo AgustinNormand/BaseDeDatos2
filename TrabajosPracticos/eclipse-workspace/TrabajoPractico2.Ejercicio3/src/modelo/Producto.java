@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -33,7 +34,7 @@ public class Producto implements Serializable{
 	private double precioCosto;
 	
 	@ManyToMany
-	@JoinColumn(table = "PROD_PROV", name = "ID_PROVEEDOR", nullable = false)
+	@JoinTable(name = "PROD_PROV", joinColumns = @JoinColumn(name = "ID_PRODUCTO"), inverseJoinColumns = @JoinColumn(name = "ID_PROVEEDOR"))
 	private List<Proveedor> proveedores;
 	
 	@OneToMany(mappedBy = "producto")
@@ -41,6 +42,10 @@ public class Producto implements Serializable{
 	
 	public int persist() {
 		return Gestor.getInstance().persist(this);
+	}
+	
+	public List<Detalle> getDetalles(){
+		return detalles;
 	}
 
 	public int getId() {
@@ -94,6 +99,6 @@ public class Producto implements Serializable{
 	@Override
 	public String toString() {
 		return "Producto [id=" + id + ", descr=" + descr + ", stock=" + stock + ", precioBase=" + precioBase
-				+ ", precioCosto=" + precioCosto + ", proveedores=" + proveedores + "]";
+				+ ", precioCosto=" + precioCosto + "]";
 	}
 }

@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -23,8 +24,7 @@ public class Proveedor implements Serializable{
 	@Column(name = "NOMBRE")
 	private String nombre;
 	
-	@ManyToMany
-	@JoinColumn(table = "PROD_PROV", name = "ID_PRODUCTO", nullable = false)
+	@ManyToMany(mappedBy = "proveedores")
 	private List<Producto> productosQueProvee;
 	
 	public int persist() {
@@ -61,6 +61,6 @@ public class Proveedor implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Proveedor [id=" + id + ", nombre=" + nombre + ", productosQueProvee=" + productosQueProvee + "]";
+		return "Proveedor [id=" + id + ", nombre=" + nombre + "]";
 	}
 }

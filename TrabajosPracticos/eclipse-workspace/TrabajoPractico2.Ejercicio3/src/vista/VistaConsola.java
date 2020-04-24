@@ -1,6 +1,7 @@
 package vista;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -31,6 +32,7 @@ public class VistaConsola {
 			System.out.println("2) Insert");
 			System.out.println("3) Update");
 			System.out.println("4) Delete");
+			System.out.println("5) Consultas");
 			System.out.println("0) Salir");
 			opcionMenuPrincipal = scan.nextInt();
 			clearScreen();
@@ -49,6 +51,9 @@ public class VistaConsola {
 				break;
 			case 4:
 				menuDelete();
+				break;
+			case 5:
+				menuConsultas();
 				break;
 			}
 			
@@ -399,9 +404,10 @@ public class VistaConsola {
 			System.out.println("Cliente insertado correctamente");
 			break;
 		case 1:
-			System.out.println("Ya existe un cliente con el ID ingresado");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
+		
 		returnMenuAnterior();
 	}
 
@@ -423,10 +429,7 @@ public class VistaConsola {
 			System.out.println("Factura insertada correctamente");
 			break;
 		case 1:
-			System.out.println("El ID ingresado no pertenece a un cliente en la base de datos");
-			break;
-		case 2:
-			System.out.println("Ya existe una factura con el NRO ingresado");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -449,10 +452,7 @@ public class VistaConsola {
 			System.out.println("DETALLE insertado correctamente");
 			break;
 		case 1:
-			System.out.println("El ID o NRO ingresados no pertenecen a un PRODUCTO o FACTURA en la base de datos");
-			break;
-		case 2:
-			System.out.println("Ya existe un DETALLE con el NRO y ID ingresados");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -481,7 +481,7 @@ public class VistaConsola {
 			System.out.println("PROVEEDOR insertado correctamente");
 			break;
 		case 1:
-			System.out.println("Ya existe un PROVEEDOR con el ID ingresado");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -504,7 +504,7 @@ public class VistaConsola {
 			System.out.println("PRODUCTO insertado correctamente");
 			break;
 		case 1:
-			System.out.println("Ya existe un PRODUCTO con el ID ingresado");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -527,7 +527,7 @@ public class VistaConsola {
 			System.out.println("DIRECCION insertada correctamente");
 			break;
 		case 1:
-			System.out.println("Ya existe una DIRECCION con el ID ingresado");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -582,7 +582,7 @@ public class VistaConsola {
 			System.out.println("Cliente eliminado correctamente");
 			break;
 		case 1:
-			System.out.println("El ID ingresado no pertenece a un cliente en la base de datos");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 
@@ -598,7 +598,7 @@ public class VistaConsola {
 			System.out.println("Factura eliminada correctamente");
 			break;
 		case 1:
-			System.out.println("El NRO ingresado no pertenece a una factura en la base de datos");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -615,7 +615,7 @@ public class VistaConsola {
 			System.out.println("DETALLE eliminado correctamente");
 			break;
 		case 1:
-			System.out.println("El NRO y/o ID ingresados no pertenecen a un DETALLE en la base de datos");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -630,7 +630,7 @@ public class VistaConsola {
 			System.out.println("Proveedor eliminado correctamente");
 			break;
 		case 1:
-			System.out.println("El ID ingresado no pertenece a un PROVEEDOR en la base de datos");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
@@ -645,7 +645,7 @@ public class VistaConsola {
 			System.out.println("Producto eliminado correctamente");
 			break;
 		case 1:
-			System.out.println("El ID ingresado no pertenece a un PRODUCTO en la base de datos");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();	
@@ -660,7 +660,7 @@ public class VistaConsola {
 			System.out.println("Direccion eliminada correctamente");
 			break;
 		case 1:
-			System.out.println("El ID ingresado no pertenece a una DIRECCION en la base de datos");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();	
@@ -773,6 +773,178 @@ public class VistaConsola {
 	}
 	//
 	
+	private void menuConsultas() {
+		int opcionMenuConsultas = -1;
+		while (opcionMenuConsultas != 0) {
+			System.out.println("1) Factura");
+			System.out.println("2) Cliente");
+			System.out.println("3) Producto");
+			System.out.println("4) Proveedor");
+			System.out.println("0) Volver");
+			opcionMenuConsultas = scan.nextInt();
+			clearScreen();
+			switch(opcionMenuConsultas) {
+			case 1:
+				menuConsultasFactura();
+				break;
+			case 2:
+				menuConsultasCliente();
+				break;
+			case 3:
+				menuConsultasProducto();
+				break;
+			case 4:
+				menuConsultasProveedor();
+				break;
+			}
+		}
+	}
+	
+	private void menuConsultasProveedor() {
+		int opcionMenuConsultasProveedor = -1;
+		while (opcionMenuConsultasProveedor != 0) {
+			System.out.println("1) Obtener todos los productos que provee un proveedor");
+			System.out.println("0) Volver");
+			opcionMenuConsultasProveedor = scan.nextInt();
+			clearScreen();
+			switch(opcionMenuConsultasProveedor) {
+			case 1:
+				consultarProductosProveedor();
+				break;
+			}
+		}
+	}
+
+	private void consultarProductosProveedor() {
+		System.out.println("Ingrese el ID del proveedor");
+		int idProveedor = scan.nextInt();
+		Proveedor proveedor = gdb.selectFromProveedorWhere(idProveedor);
+		if (proveedor != null) {
+			List<Producto> productos = proveedor.getProductosQueProvee();
+			if (productos.isEmpty())
+				System.out.println("El proveedor no provee ningun producto");
+			else
+				for (Producto producto : productos) 
+					System.out.println(producto.toString());
+		} else
+			System.out.println("No existe un proveedor con dicho ID");
+		returnMenuAnterior();		
+	}
+
+	private void menuConsultasProducto() {
+		int opcionMenuConsultasProducto = -1;
+		while (opcionMenuConsultasProducto != 0) {
+			System.out.println("1) Obtener todos los detalles en los que aparece un producto");
+			System.out.println("2) Obtener proveedores de un producto");
+			System.out.println("0) Volver");
+			opcionMenuConsultasProducto = scan.nextInt();
+			clearScreen();
+			switch(opcionMenuConsultasProducto) {
+			case 1:
+				consultarDetallesProducto();
+				break;
+			case 2:
+				consultarProveedoresProducto();
+				break;
+			}
+		}
+	}
+
+	private void consultarProveedoresProducto() {
+		System.out.println("Ingrese el ID del producto");
+		int idProducto = scan.nextInt();
+		Producto producto = gdb.selectFromProductoWhere(idProducto);
+		if (producto != null) {
+			List<Proveedor> proveedores = producto.getProveedores();
+			if (proveedores.isEmpty())
+				System.out.println("El producto no lo provee ningun proveedor");
+			else
+				for (Proveedor proveedor : proveedores) 
+					System.out.println(proveedor.toString());
+		} else
+			System.out.println("No existe un producto con dicho ID");
+		returnMenuAnterior();		
+	}
+
+	private void consultarDetallesProducto() {
+		System.out.println("Ingrese el ID del producto");
+		int idProducto = scan.nextInt();
+		Producto producto = gdb.selectFromProductoWhere(idProducto);
+		if (producto != null) {
+			List<Detalle> detalles = producto.getDetalles();
+			if (detalles.isEmpty())
+				System.out.println("El producto no aparece en ningun detalle");
+			else
+				for (Detalle detalle : detalles) 
+					System.out.println(detalle.toString());
+		} else
+			System.out.println("No existe un producto con dicho ID");
+		returnMenuAnterior();
+	}
+
+	private void menuConsultasCliente() {
+		int opcionMenuConsultasCliente = -1;
+		while (opcionMenuConsultasCliente != 0) {
+			System.out.println("1) Obtener facturas de un cliente");
+			System.out.println("0) Volver");
+			opcionMenuConsultasCliente = scan.nextInt();
+			clearScreen();
+			switch(opcionMenuConsultasCliente) {
+			case 1:
+				consultarFacturasCliente();
+				break;
+			}
+		}		
+	}
+
+	private void consultarFacturasCliente() {
+		System.out.println("Ingrese el ID del cliente");
+		int idCliente = scan.nextInt();
+		Cliente cliente = gdb.selectFromClienteWhere(idCliente);
+		if (cliente != null) {
+			List<Factura> facturas = cliente.getFacturas();
+			if(facturas.isEmpty())
+				System.out.println("El cliente no contiene facturas");
+			else
+				for (Factura factura : facturas) {
+					System.out.println(factura.toString());
+				}
+		} else
+			System.out.println("No existe un cliente con dicho ID");
+		returnMenuAnterior();
+	}
+
+	private void menuConsultasFactura() {
+		int opcionMenuConsultasFactura = -1;
+		while (opcionMenuConsultasFactura != 0) {
+			System.out.println("1) Obtener detalles de una factura");
+			System.out.println("0) Volver");
+			opcionMenuConsultasFactura = scan.nextInt();
+			clearScreen();
+			switch(opcionMenuConsultasFactura) {
+			case 1:
+				consultarDetallesFactura();
+				break;
+			}
+		}
+	}
+
+	private void consultarDetallesFactura() {
+		System.out.println("Ingrese el NRO de la factura");
+		int nroFactura = scan.nextInt();
+		Factura factura = gdb.selectFromFacturaWhere(nroFactura);
+		if (factura != null) {
+		List<Detalle> detalles = factura.getDetalles();
+		if (detalles.isEmpty())
+			System.out.println("La factura no contiene detalles");
+		else
+			for (Detalle detalle : detalles)
+				System.out.println(detalle.toString());
+		} else
+			System.out.println("No existe una factura con dicho NRO");
+		returnMenuAnterior();
+	}
+
 	public void returnMenuAnterior() {
 		System.out.println("Persione una tecla para volver al menu anterior.");
 		try {

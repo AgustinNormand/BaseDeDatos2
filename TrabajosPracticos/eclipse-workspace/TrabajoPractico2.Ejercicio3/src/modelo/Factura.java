@@ -67,6 +67,10 @@ public class Factura implements Serializable{
 	public int getNro() {
 		return nro;
 	}
+	
+	public List<Detalle> getDetalles(){
+		return this.detalles;
+	}
 
 	public void setNro(int nro) {
 		this.nro = nro;
