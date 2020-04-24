@@ -1,6 +1,8 @@
 package com.bd2.unidad2.repository.impl;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +32,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
 			con.hset(usuario.getEmail(),"Password", usuario.getPassword());
 			con.hset(usuario.getEmail(), "Estado", "Activo");
 			con.hset(usuario.getEmail(), "Token", "");
-			//con.hset(usuario.getEmail(), "Conexiones", );
+			con.hset(usuario.getEmail(), "Conexiones", "");
 			con.expire(usuario.getEmail(), 70560*60);
 			usuarioReturn = new Usuario(con.hgetall(usuario.getEmail()),con.ttl(usuario.getEmail())==-1);
 			}
@@ -113,8 +115,14 @@ public class UsuarioDaoImpl implements UsuarioDao{
 
 	@Override
 	public List<LocalDateTime> getAllConnectionPerMail(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		DateTimeFormatter isoFecha = DateTimeFormatter.ISO_LOCAL_DATE;
+		ArrayList<LocalDateTime> cnx = new ArrayList<>();
+		String conexion = con.hget(email, "Conexiones");
+		String[] conexiones = conexion.split("/");
+		for(String str : conexiones) {
+			cnx.add(LocalDateTime.parse(str));
+		}
+		return cnx;
 	}
 
 	@Override

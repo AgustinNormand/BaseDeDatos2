@@ -1,4 +1,6 @@
 package com.bd2.unidad2.repository.impl;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import com.bd2.unidad2.repository.LoginDao;
 import com.bd2.unidad2.repository.exceptions.IncorrectToken;
@@ -17,6 +19,9 @@ public class LoginDaoImpl implements LoginDao {
 		if (con.exists(email) == 1) {
 			String passwd = con.hget(email, "Password");
 			if (passwd.equals(password)) {
+				String conexiones = con.hget(email, "Conexiones");
+				conexiones = conexiones + LocalDateTime.now() + "/";
+				con.hset(email, "Conexiones", conexiones);
 				String databaseToken = con.hget(email, "Token");
 				if (databaseToken == "") {
 					token = TokenGenerator.generate();
