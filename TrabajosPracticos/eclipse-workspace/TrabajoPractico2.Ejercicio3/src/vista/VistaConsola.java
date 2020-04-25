@@ -701,26 +701,21 @@ public class VistaConsola {
 	}
 
 	private void updateCliente() {
-		/*
 		System.out.println("Ingrese el ID del cliente a modificar");
 		int idClienteAModificar = scan.nextInt();
-		System.out.println("Ingrese el nuevo ID");
-		int idClienteNuevo = scan.nextInt();
-		System.out.println("Ingrese la nueva DESCRIPCION");
-		String descripcion = scan.next();
-		int errorCode = gdb.updateCliente(idClienteAModificar, idClienteNuevo, descripcion);
+		System.out.println("Ingrese el nuevo NOMBRE");
+		String nuevoNombre = scan.next();
+		System.out.println("Ingrese el ID de la nueva DIRECCION");
+		int nuevoIdDireccion = scan.nextInt();
+		int errorCode = gdb.updateClienteSet(idClienteAModificar, nuevoNombre, nuevoIdDireccion);
 		switch (errorCode) {
 		case 0:
 			System.out.println("Cliente modificado correctamente.");
 			break;
 		case 1:
-			System.out.println("El ID ingresado no pertenece a un cliente en la base de datos");
-			break;
-		case 2:
-			System.out.println("El nuevo ID ya existe en la base de datos");
+			System.out.println(gdb.getErrorMessage());
 			break;
 		}
-		*/
 		returnMenuAnterior();
 	}
 

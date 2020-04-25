@@ -1,4 +1,5 @@
 package controlador;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -227,6 +228,26 @@ public class Gestor {
 		}
 		return errorCode;
 	}
+	
+	public int updateClienteSet(int idClienteAModificar, String nuevoNombre, int nuevoIdDireccion) {
+		int errorCode = 0;
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			Cliente cliente = selectFromClienteWhere(idClienteAModificar);
+			cliente = em.merge(cliente);
+			cliente.setNombre(nuevoNombre);
+			cliente.setDireccion(selectFromDireccionWhere(nuevoIdDireccion));
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			errorCode = 1;
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
+	}
 	/* FIN DE OPERACIONES CON CLIENTE */
 
 	/* OPERACIONES CON PRODUCTO */
@@ -266,6 +287,18 @@ public class Gestor {
 		}
 		finally {
 			em.close();
+		}
+		return errorCode;
+	}
+	
+	public int updateProductoSet(int idProductoAModificar, String nuevaDescripcion, int nuevoStock, double precioBase, double precioCosto) {
+		int errorCode = 0;
+		EntityManager em = emf.createEntityManager();
+		try {
+			
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			errorCode = 1;
 		}
 		return errorCode;
 	}
@@ -311,6 +344,18 @@ public class Gestor {
 		}
 		return errorCode;
 	}
+	
+	public int updateProveedorSet(int idProveedorAModificar, String nuevoNombre, ArrayList<Producto> productosQueProvee) {
+		int errorCode = 0;
+		EntityManager em = emf.createEntityManager();
+		try {
+			
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			errorCode = 1;
+		}
+		return errorCode;
+	}
 	/* FIN DE OPERACIONES CON PROVEEDOR */
 
 	/* OPERACIONES CON DIRECCION */
@@ -350,6 +395,17 @@ public class Gestor {
 		}
 		finally {
 			em.close();
+		}
+		return errorCode;
+	}
+	public int updateDireccionSet() {
+		int errorCode = 0;
+		EntityManager em = emf.createEntityManager();
+		try {
+			
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			errorCode = 1;
 		}
 		return errorCode;
 	}
