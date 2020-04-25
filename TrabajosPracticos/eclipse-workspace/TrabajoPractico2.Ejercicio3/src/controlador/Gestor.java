@@ -3,6 +3,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 
 
@@ -93,6 +94,26 @@ public class Gestor {
 		}
 		return errorCode;
 	}
+	
+	public int updateFacturaSet(int nroFacturaAModificar,int idClienteNuevo, double importeNuevo) {
+		int errorCode = 0;
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			Factura oldFactura = this.selectFromFacturaWhere(nroFacturaAModificar);
+			oldFactura = em.merge(oldFactura);
+			oldFactura.setImporte(importeNuevo);
+			oldFactura.setCliente(this.selectFromClienteWhere(idClienteNuevo));
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+			errorCode = 1;
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
+	}
 	/* FIN DE OPERACIONES CON FACTURA */
 
 	/* OPERACIONES CON DETALLE */
@@ -106,8 +127,15 @@ public class Gestor {
 
 	public Detalle selectFromDetalleWhere(int nro, int id) {
 		EntityManager em = emf.createEntityManager();
-		//Detalle detalle = em.find(Detalle.class,nro,id);
-		Detalle detalle = (Detalle) em.createQuery("SELECT d FROM Detalle d WHERE d.producto = "+id+" AND d.factura = "+nro); 
+		Detalle detalle = null;
+		try {
+			detalle = em.createQuery("SELECT d FROM Detalle d WHERE d.factura = :nro AND d.producto = :id",Detalle.class)
+					.setParameter("nro", this.selectFromFacturaWhere(nro))
+					.setParameter("id", this.selectFromProductoWhere(id))
+					.getSingleResult();
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+		}
 		return detalle;
 	}
 
@@ -125,6 +153,32 @@ public class Gestor {
 		} catch (Exception e) {
 			errorCode = 1;
 			errorMessage = e.getMessage();
+		}
+		finally {
+			em.close();
+		}
+		return errorCode;
+	}
+	
+	public int updateDetalleSet(int nroDetalleAModificar, int idDetalleAModificar, int nuevaCantidad, double nuevoImporte) {
+		int errorCode = 0;
+		Detalle detalle = null;
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		try {
+			detalle = detalle = em.createQuery("SELECT d FROM Detalle d WHERE d.factura = :nro AND d.producto = :id",Detalle.class)
+					.setParameter("nro", this.selectFromFacturaWhere(nroDetalleAModificar))
+					.setParameter("id", this.selectFromProductoWhere(idDetalleAModificar))
+					.getSingleResult();
+			detalle.setPrecio(nuevoImporte);
+			detalle.setCantidad(nuevaCantidad);
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			if (detalle == null)
+				errorMessage = "El NRO e ID no pertenecen a un detalle en la base de datos";
+			else
+				errorMessage = e.getMessage();
+			errorCode = 1;
 		}
 		finally {
 			em.close();
@@ -228,7 +282,12 @@ public class Gestor {
 
 	public Proveedor selectFromProveedorWhere(int idProveedor) {
 		EntityManager em = emf.createEntityManager();
-		Proveedor proveedor = em.find(Proveedor.class, idProveedor);
+		Proveedor proveedor = null;
+		try {
+			proveedor = em.find(Proveedor.class, idProveedor);
+		} catch (Exception e) {
+			errorMessage = e.getMessage();
+		}
 		return proveedor;
 	}
 
@@ -265,7 +324,12 @@ public class Gestor {
 
 	public Direccion selectFromDireccionWhere(int idDireccion) {
 		EntityManager em = emf.createEntityManager();
-		Direccion direccion = em.find(Direccion.class, idDireccion);
+		Direccion direccion = null;
+		try {
+			direccion = em.find(Direccion.class, idDireccion);
+		} catch (Exception e) {
+			e.getMessage();
+		}
 		return direccion;
 	}
 

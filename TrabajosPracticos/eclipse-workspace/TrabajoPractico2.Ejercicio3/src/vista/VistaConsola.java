@@ -417,10 +417,6 @@ public class VistaConsola {
 		factura.setNro(scan.nextInt());
 		System.out.println("Ingese el ID del cliente de la factura.");
 		factura.setCliente(gdb.selectFromClienteWhere(scan.nextInt()));
-		System.out.println("Ingese el IMPORTE de la factura.");
-		factura.setImporte(scan.nextDouble());
-		System.out.println("Ingese el ESTADO de la factura.");
-		factura.setEstado(scan.nextByte());
 		factura.setFecha(new Date());
 		
 		int errorCode = factura.persist();
@@ -729,35 +725,43 @@ public class VistaConsola {
 	}
 
 	private void updateFactura() {
-		/*
+		
 		System.out.println("Ingrese el NUMERO de la factura a modificar");
 		int nroFacturaAModificar = scan.nextInt();
-		System.out.println("Ingrese el nuevo NUMERO");
-		int nroFacturaNuevo = scan.nextInt();
 		System.out.println("Ingrese el nuevo ID");
 		int idClienteNuevo = scan.nextInt();
 		System.out.println("Ingrese el nuevo IMPORTE");
 		double importeNuevo = scan.nextDouble();
-		int errorCode = gdb.updateFactura(nroFacturaAModificar, nroFacturaNuevo, idClienteNuevo, importeNuevo);
+		int errorCode = gdb.updateFacturaSet(nroFacturaAModificar, idClienteNuevo, importeNuevo);
 		switch(errorCode) {
 		case 0:
 			System.out.println("Factura modificada correctamente");
 			break;
 		case 1:
-			System.out.println("El NUMERO ingresado no pertenece a una factura en la base de datos");
-			break;
-		case 2:
-			System.out.println("El nuevo ID no pertenece a un cliente en la base de datos");
-			break;
-		case 3:
-			System.out.println("El nuevo NUMERO ya existe en la base de datos");
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
-		*/
 		returnMenuAnterior();
 	}
 	
 	private void updateDetalle() {
+		System.out.println("Ingrese el NUMERO del detalle a modificar");
+		int nroDetalleAModificar = scan.nextInt();
+		System.out.println("Ingrese el ID del detalle a modificar");
+		int idDetalleAModificar = scan.nextInt();
+		System.out.println("Ingrese la nueva CANTIDAD");
+		int nuevaCantidad = scan.nextInt();
+		System.out.println("Ingrese el nuevo IMPORTE");
+		double nuevoImporte = scan.nextDouble();
+		int errorCode = gdb.updateDetalleSet(nroDetalleAModificar, idDetalleAModificar, nuevaCantidad, nuevoImporte);
+		switch(errorCode) {
+		case 0:
+			System.out.println("Detalle modificado correctamente");
+			break;
+		case 1:
+			System.out.println(Gestor.getErrorMessage());
+			break;
+		}
 		returnMenuAnterior();
 	}
 	
