@@ -290,15 +290,25 @@ public class Gestor {
 		}
 		return errorCode;
 	}
-	
-	public int updateProductoSet(int idProductoAModificar, String nuevaDescripcion, int nuevoStock, double precioBase, double precioCosto) {
+
+	public int updateProductoSet(int idProductoAModificar, String nuevaDescripcion, int nuevoStock, double nuevoPrecioBase, double nuevoPrecioCosto) {
 		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
 		try {
-			
+			Producto producto = selectFromProductoWhere(idProductoAModificar);
+			producto = em.merge(producto);
+			producto.setDescr(nuevaDescripcion);
+			producto.setStock(nuevoStock);
+			producto.setPrecioBase(nuevoPrecioBase);
+			producto.setPrecioCosto(nuevoPrecioCosto);
+			em.getTransaction().commit();
 		} catch (Exception e) {
 			errorMessage = e.getMessage();
 			errorCode = 1;
+		}
+		finally {
+			em.close();
 		}
 		return errorCode;
 	}
@@ -348,11 +358,19 @@ public class Gestor {
 	public int updateProveedorSet(int idProveedorAModificar, String nuevoNombre, ArrayList<Producto> productosQueProvee) {
 		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
 		try {
-			
+			Proveedor proveedor = selectFromProveedorWhere(idProveedorAModificar);
+			proveedor = em.merge(proveedor);
+			proveedor.setNombre(nuevoNombre);
+			proveedor.setProductosQueProvee(productosQueProvee);
+			em.getTransaction().commit();
 		} catch (Exception e) {
 			errorMessage = e.getMessage();
 			errorCode = 1;
+		}
+		finally {
+			em.close();
 		}
 		return errorCode;
 	}
@@ -398,14 +416,23 @@ public class Gestor {
 		}
 		return errorCode;
 	}
-	public int updateDireccionSet() {
+	public int updateDireccionSet(int idDireccionAModificar, String nuevaCalle, int nuevoNumero, String nuevaLocalidad) {
 		int errorCode = 0;
 		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
 		try {
-			
+			Direccion direccion = selectFromDireccionWhere(idDireccionAModificar);
+			direccion = em.merge(direccion);
+			direccion.setCalle(nuevaCalle);
+			direccion.setNro(nuevoNumero);
+			direccion.setLocalidad(nuevaLocalidad);
+			em.getTransaction().commit();
 		} catch (Exception e) {
 			errorMessage = e.getMessage();
 			errorCode = 1;
+		}
+		finally {
+			em.close();
 		}
 		return errorCode;
 	}

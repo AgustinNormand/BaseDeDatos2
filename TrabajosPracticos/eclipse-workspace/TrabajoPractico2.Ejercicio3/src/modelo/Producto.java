@@ -33,8 +33,7 @@ public class Producto implements Serializable{
 	@Column(name = "PRECIO_COSTO")
 	private double precioCosto;
 	
-	@ManyToMany
-	@JoinTable(name = "PROD_PROV", joinColumns = @JoinColumn(name = "ID_PRODUCTO"), inverseJoinColumns = @JoinColumn(name = "ID_PROVEEDOR"))
+	@ManyToMany(mappedBy = "productosQueProvee")
 	private List<Proveedor> proveedores;
 	
 	@OneToMany(mappedBy = "producto")

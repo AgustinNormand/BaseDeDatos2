@@ -461,13 +461,18 @@ public class VistaConsola {
 		System.out.println("Ingresar el NOMBRE del PROVEEDOR a insertar");
 		proveedor.setNombre(scan.next());
 		int idProducto = -1;
-		List<Producto> productosQueProvee = null;
+		ArrayList<Producto> productosQueProvee = new ArrayList<>();
 		System.out.println("Ingresar el ID 0 para dejar de ingresar PRODUCTOS");
 		while (idProducto != 0) {
 			System.out.println("Ingresar ID de PRODUCTO que provee el PROVEEDOR");
 			idProducto = scan.nextInt();
-			if (idProducto != 0)
-				productosQueProvee.add(gdb.selectFromProductoWhere(idProducto));
+			if (idProducto != 0) {
+				Producto producto = gdb.selectFromProductoWhere(idProducto);
+				if (producto != null)
+					productosQueProvee.add(producto);
+				else
+					System.out.println("Producto no encontrado en la base de datos");
+			}
 		}
 		proveedor.setProductosQueProvee(productosQueProvee);
 		
@@ -703,7 +708,7 @@ public class VistaConsola {
 	private void updateCliente() {
 		System.out.println("Ingrese el ID del cliente a modificar");
 		int idClienteAModificar = scan.nextInt();
-		System.out.println("Ingrese el nuevo NOMBRE");
+		System.out.println("Ingrese el nuevo NOMBRE (SinEspacios)");
 		String nuevoNombre = scan.next();
 		System.out.println("Ingrese el ID de la nueva DIRECCION");
 		int nuevoIdDireccion = scan.nextInt();
@@ -761,13 +766,76 @@ public class VistaConsola {
 	}
 	
 	private void updateProveedor() {
+		System.out.println("Ingrese el ID del PROVEEDOR a modificar");
+		int idProveedorAModificar = scan.nextInt();
+		System.out.println("Ingrese el nuevo NOMBRE del PROVEEDOR (SinEspacios)");
+		String nuevoNombre = scan.next();
+		int idProducto = -1;
+		ArrayList<Producto> productosQueProvee = new ArrayList<>();
+		System.out.println("Ingresar el ID 0 para dejar de ingresar PRODUCTOS");
+		while (idProducto != 0) {
+			System.out.println("Ingresar ID de PRODUCTO que provee el PROVEEDOR");
+			idProducto = scan.nextInt();
+			if (idProducto != 0) {
+				Producto producto = gdb.selectFromProductoWhere(idProducto);
+				if (producto != null)
+					productosQueProvee.add(producto);
+				else
+					System.out.println("Producto no encontrado en la base de datos");
+			}
+		}
+		int errorCode = gdb.updateProveedorSet(idProveedorAModificar, nuevoNombre, productosQueProvee);
+		switch(errorCode) {
+		case 0:
+			System.out.println("PROVEEDOR insertado correctamente");
+			break;
+		case 1:
+			System.out.println(Gestor.getErrorMessage());
+			break;
+		}
 		returnMenuAnterior();
 	}
 	
 	private void updateProducto() {
+		System.out.println("Ingrese el ID del producto a modificar");
+		int idProductoAModificar = scan.nextInt();
+		System.out.println("Ingrese la nueva DESCRIPCION del producto (SinEspacios)");
+		String nuevaDescripcion = scan.next();
+		System.out.println("Ingrese el nuevo STOCK");
+		int nuevoStock = scan.nextInt();
+		System.out.println("Ingrese el nuevo PRECIO_BASE");
+		double nuevoPrecioBase = scan.nextDouble();
+		System.out.println("Ingrese el nuevo PRECIO_COSTO");
+		double nuevoPrecioCosto = scan.nextDouble();
+		int errorCode = gdb.updateProductoSet(idProductoAModificar, nuevaDescripcion, nuevoStock, nuevoPrecioBase,nuevoPrecioCosto);
+		switch(errorCode) {
+		case 0:
+			System.out.println("Producto modificado correctamente");
+			break;
+		case 1:
+			System.out.println(Gestor.getErrorMessage());
+			break;
+		}
 		returnMenuAnterior();
 	}
 	private void updateDireccion() {
+		System.out.println("Ingrese el ID de la direccion a modificar");
+		int idDireccionAModificar = scan.nextInt();
+		System.out.println("Ingrese la nueva CALLE de la direccion (SinEspacios)");
+		String nuevaCalle = scan.next();
+		System.out.println("Ingrese el nuevo NUMERO");
+		int nuevoNumero = scan.nextInt();
+		System.out.println("Ingrese la nueva LOCALIDAD (SinEspacios)");
+		String nuevaLocalidad = scan.next();
+		int errorCode = gdb.updateDireccionSet(idDireccionAModificar, nuevaCalle, nuevoNumero, nuevaLocalidad);
+		switch(errorCode) {
+		case 0:
+			System.out.println("Direccion modificada correctamente");
+			break;
+		case 1:
+			System.out.println(Gestor.getErrorMessage());
+			break;
+		}
 		returnMenuAnterior();
 	}
 	//

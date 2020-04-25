@@ -24,7 +24,8 @@ public class Proveedor implements Serializable{
 	@Column(name = "NOMBRE")
 	private String nombre;
 	
-	@ManyToMany(mappedBy = "proveedores")
+	@ManyToMany
+	@JoinTable(name = "PROD_PROV", joinColumns = @JoinColumn(name = "ID_PROVEEDOR"), inverseJoinColumns = @JoinColumn(name = "ID_PRODUCTO"))
 	private List<Producto> productosQueProvee;
 	
 	public int persist() {
