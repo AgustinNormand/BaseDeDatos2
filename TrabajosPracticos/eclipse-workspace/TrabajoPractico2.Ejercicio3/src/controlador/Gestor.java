@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 
 
@@ -20,7 +19,7 @@ public class Gestor {
 	private static Gestor singleInstance = null;
 
 	private EntityManagerFactory emf = null;
-	
+
 	private static String errorMessage = "";
 
 	private Gestor() {
@@ -30,7 +29,7 @@ public class Gestor {
 	public static String getErrorMessage() {
 		return errorMessage;
 	}
-	
+
 	public static Gestor getInstance() {
 		if (singleInstance == null)
 			singleInstance = new Gestor();
@@ -95,19 +94,23 @@ public class Gestor {
 		}
 		return errorCode;
 	}
-	
+
 	public int updateFacturaSet(int nroFacturaAModificar,int idClienteNuevo, double importeNuevo) {
 		int errorCode = 0;
+		Factura oldFactura = null;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			Factura oldFactura = this.selectFromFacturaWhere(nroFacturaAModificar);
+			oldFactura = this.selectFromFacturaWhere(nroFacturaAModificar);
 			oldFactura = em.merge(oldFactura);
 			oldFactura.setImporte(importeNuevo);
 			oldFactura.setCliente(this.selectFromClienteWhere(idClienteNuevo));
 			em.getTransaction().commit();
 		} catch (Exception e) {
-			errorMessage = e.getMessage();
+			if (oldFactura == null)
+				errorMessage = "Factura no encontrada";
+			else
+				errorMessage = e.getMessage();
 			errorCode = 1;
 		}
 		finally {
@@ -160,7 +163,8 @@ public class Gestor {
 		}
 		return errorCode;
 	}
-	
+
+	@SuppressWarnings(value = { "all" })
 	public int updateDetalleSet(int nroDetalleAModificar, int idDetalleAModificar, int nuevaCantidad, double nuevoImporte) {
 		int errorCode = 0;
 		Detalle detalle = null;
@@ -176,7 +180,7 @@ public class Gestor {
 			em.getTransaction().commit();
 		} catch (Exception e) {
 			if (detalle == null)
-				errorMessage = "El NRO e ID no pertenecen a un detalle en la base de datos";
+				errorMessage = "Detalle no encontrado";
 			else
 				errorMessage = e.getMessage();
 			errorCode = 1;
@@ -228,19 +232,23 @@ public class Gestor {
 		}
 		return errorCode;
 	}
-	
+
 	public int updateClienteSet(int idClienteAModificar, String nuevoNombre, int nuevoIdDireccion) {
 		int errorCode = 0;
+		Cliente cliente = null;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			Cliente cliente = selectFromClienteWhere(idClienteAModificar);
+			cliente = selectFromClienteWhere(idClienteAModificar);
 			cliente = em.merge(cliente);
 			cliente.setNombre(nuevoNombre);
 			cliente.setDireccion(selectFromDireccionWhere(nuevoIdDireccion));
 			em.getTransaction().commit();
 		} catch (Exception e) {
-			errorMessage = e.getMessage();
+			if (cliente == null)
+				errorMessage = "Cliente no encontrado";
+			else
+				errorMessage = e.getMessage();
 			errorCode = 1;
 		}
 		finally {
@@ -293,10 +301,11 @@ public class Gestor {
 
 	public int updateProductoSet(int idProductoAModificar, String nuevaDescripcion, int nuevoStock, double nuevoPrecioBase, double nuevoPrecioCosto) {
 		int errorCode = 0;
+		Producto producto = null;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			Producto producto = selectFromProductoWhere(idProductoAModificar);
+			producto = selectFromProductoWhere(idProductoAModificar);
 			producto = em.merge(producto);
 			producto.setDescr(nuevaDescripcion);
 			producto.setStock(nuevoStock);
@@ -304,7 +313,10 @@ public class Gestor {
 			producto.setPrecioCosto(nuevoPrecioCosto);
 			em.getTransaction().commit();
 		} catch (Exception e) {
-			errorMessage = e.getMessage();
+			if (producto == null)
+				errorMessage = "Producto no encontrado";
+			else
+				errorMessage = e.getMessage();
 			errorCode = 1;
 		}
 		finally {
@@ -354,19 +366,23 @@ public class Gestor {
 		}
 		return errorCode;
 	}
-	
+
 	public int updateProveedorSet(int idProveedorAModificar, String nuevoNombre, ArrayList<Producto> productosQueProvee) {
 		int errorCode = 0;
+		Proveedor proveedor = null;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			Proveedor proveedor = selectFromProveedorWhere(idProveedorAModificar);
+			proveedor = selectFromProveedorWhere(idProveedorAModificar);
 			proveedor = em.merge(proveedor);
 			proveedor.setNombre(nuevoNombre);
 			proveedor.setProductosQueProvee(productosQueProvee);
 			em.getTransaction().commit();
 		} catch (Exception e) {
-			errorMessage = e.getMessage();
+			if (proveedor == null)
+				errorMessage = "Proveedor no encontrado";
+			else
+				errorMessage = e.getMessage();
 			errorCode = 1;
 		}
 		finally {
@@ -418,17 +434,21 @@ public class Gestor {
 	}
 	public int updateDireccionSet(int idDireccionAModificar, String nuevaCalle, int nuevoNumero, String nuevaLocalidad) {
 		int errorCode = 0;
+		Direccion direccion = null;
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
 		try {
-			Direccion direccion = selectFromDireccionWhere(idDireccionAModificar);
+			direccion = selectFromDireccionWhere(idDireccionAModificar);
 			direccion = em.merge(direccion);
 			direccion.setCalle(nuevaCalle);
 			direccion.setNro(nuevoNumero);
 			direccion.setLocalidad(nuevaLocalidad);
 			em.getTransaction().commit();
 		} catch (Exception e) {
-			errorMessage = e.getMessage();
+			if (direccion == null)
+				errorMessage = "Direccion no encontrada";
+			else
+				errorMessage = e.getMessage();
 			errorCode = 1;
 		}
 		finally {

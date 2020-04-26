@@ -5,8 +5,6 @@ public class Gestor {
 
 	public int insertarCliente(int idCliente,String descr) {
 		int errorCode = 0;
-		int index = 0;
-		boolean found = false;
 		if (!clientExists(idCliente)) {
 			Cliente cliente = new Cliente(idCliente,descr);
 			db.insertarCliente(cliente);

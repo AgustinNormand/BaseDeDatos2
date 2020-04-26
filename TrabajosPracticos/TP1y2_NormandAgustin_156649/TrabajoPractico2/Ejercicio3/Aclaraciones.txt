@@ -1,0 +1,3 @@
+Para realizar el ejercicio utilicé una base de datos similar a la del Trabajo Práctico 1, con la direferencia que agregúe las clases Cliente, Direccion, Producto y Proveedor para tener distintos tipos de cardinalidades, y poder utilizar todas las anotaciones de JPA.
+@OneToOne, @ManyToMany y @ManyToOne.
+Incluyo en la carpeta Resources, el diagrama entidad relacion y el codigo sql utilizado para crear la base de datos.

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+             http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+
+  <persistence-unit name="database">
+  
+  <!-- ACA SE DEFINEN LAS CLASES, SINO TIRA ERROR! -->
+  <class>modelo.Factura</class>
+  <class>modelo.Detalle</class>
+  <class>modelo.Producto</class>
+  <class>modelo.Cliente</class>
+  <class>modelo.Proveedor</class>
+  <class>modelo.Direccion</class>
+  
+  <!--  -->
+    <properties>
+        <property name="javax.persistence.jdbc.driver" value="org.firebirdsql.jdbc.FBDriver" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql://localhost:3050//firebird/data/TP1.fdb?charSet=utf-8" />
+        <property name="javax.persistence.jdbc.user" value="SYSDBA" />
+        <property name="javax.persistence.jdbc.password" value="masterkey" />
+         <property name="eclipselink.logging.level" value="OFF" />
+    </properties>
+  </persistence-unit>
+
+</persistence>

@@ -1,0 +1,4 @@
+Si elimina un cliente, se eliminan en cascada todas sus facturas.
+Si se modifica un cliente, se modifican en cascada todas sus facturas.
+
+Se incluyen en el codigo, los test de todas las operaciones posibles sobre la base de datos

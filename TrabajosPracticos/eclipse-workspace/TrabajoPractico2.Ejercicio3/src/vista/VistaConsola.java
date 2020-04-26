@@ -56,7 +56,7 @@ public class VistaConsola {
 				menuConsultas();
 				break;
 			}
-			
+
 		}
 	}
 
@@ -307,7 +307,7 @@ public class VistaConsola {
 				System.out.println(producto);
 		returnMenuAnterior();	
 	}
-	
+
 	private void menuSelectDireccion() {
 		int opcionMenuSelectDireccion = -1;
 		while (opcionMenuSelectDireccion != 0) {
@@ -397,7 +397,7 @@ public class VistaConsola {
 		cliente.setNombre(scan.next());
 		System.out.println("Ingresar el ID de la DIRECCION del cliente a insertar");
 		cliente.setDireccion(gdb.selectFromDireccionWhere(scan.nextInt()));
-		
+
 		int errorCode = cliente.persist();
 		switch(errorCode) {
 		case 0:
@@ -407,7 +407,7 @@ public class VistaConsola {
 			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
-		
+
 		returnMenuAnterior();
 	}
 
@@ -418,7 +418,7 @@ public class VistaConsola {
 		System.out.println("Ingese el ID del cliente de la factura.");
 		factura.setCliente(gdb.selectFromClienteWhere(scan.nextInt()));
 		factura.setFecha(new Date());
-		
+
 		int errorCode = factura.persist();
 		switch(errorCode) {
 		case 0:
@@ -441,7 +441,7 @@ public class VistaConsola {
 		detalle.setCantidad(scan.nextInt());
 		System.out.println("Ingresar el PRECIO del DETALLE");
 		detalle.setPrecio(scan.nextDouble());
-		
+
 		int errorCode = detalle.persist();
 		switch(errorCode) {
 		case 0:
@@ -453,12 +453,12 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void insertProveedor() {
 		Proveedor proveedor = new Proveedor();
 		System.out.println("Ingresar el ID del PROVEEDOR a insertar");
 		proveedor.setId(scan.nextInt());
-		System.out.println("Ingresar el NOMBRE del PROVEEDOR a insertar");
+		System.out.println("Ingresar el NOMBRE del PROVEEDOR a insertar (SinEspacios)");
 		proveedor.setNombre(scan.next());
 		int idProducto = -1;
 		ArrayList<Producto> productosQueProvee = new ArrayList<>();
@@ -475,7 +475,7 @@ public class VistaConsola {
 			}
 		}
 		proveedor.setProductosQueProvee(productosQueProvee);
-		
+
 		int errorCode = proveedor.persist();
 		switch(errorCode) {
 		case 0:
@@ -510,18 +510,18 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void insertDireccion() {
 		Direccion direccion = new Direccion();
 		System.out.println("Ingresar el ID del DIRECCION");
 		direccion.setId(scan.nextInt());
-		System.out.println("Ingresar la CALLE de la DIRECCION");
+		System.out.println("Ingresar la CALLE de la DIRECCION (SinEspacios)");
 		direccion.setCalle(scan.next());
 		System.out.println("Ingresar el NRO de la DIRECCION");
 		direccion.setNro(scan.nextInt());
 		System.out.println("Ingresar la LOCALIDAD de la DIRECCION");
 		direccion.setLocalidad(scan.next());
-		
+
 		int errorCode = direccion.persist();
 		switch (errorCode) {
 		case 0:
@@ -569,7 +569,7 @@ public class VistaConsola {
 			case 6:
 				deleteDireccion();
 				break;
-					
+
 			}
 		}
 	}
@@ -604,7 +604,7 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void deleteDetalle() {
 		System.out.println("Ingrese el NRO del DETALLE a eliminar");
 		int nroDetalle = scan.nextInt();
@@ -621,7 +621,7 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void deleteProveedor() {
 		System.out.println("Ingrese el ID del PROVEEDOR a eliminar");
 		int idProveedor = scan.nextInt();
@@ -636,7 +636,7 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void deleteProducto() {
 		System.out.println("Ingrese el ID del PRODUCTO a eliminar");
 		int idProducto = scan.nextInt();
@@ -651,7 +651,7 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();	
 	}
-	
+
 	private void deleteDireccion() {
 		System.out.println("Ingrese el ID de la DIRECCION a eliminar");
 		int idDireccion = scan.nextInt();
@@ -718,14 +718,14 @@ public class VistaConsola {
 			System.out.println("Cliente modificado correctamente.");
 			break;
 		case 1:
-			System.out.println(gdb.getErrorMessage());
+			System.out.println(Gestor.getErrorMessage());
 			break;
 		}
 		returnMenuAnterior();
 	}
 
 	private void updateFactura() {
-		
+
 		System.out.println("Ingrese el NUMERO de la factura a modificar");
 		int nroFacturaAModificar = scan.nextInt();
 		System.out.println("Ingrese el nuevo ID");
@@ -743,7 +743,7 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void updateDetalle() {
 		System.out.println("Ingrese el NUMERO del detalle a modificar");
 		int nroDetalleAModificar = scan.nextInt();
@@ -764,7 +764,7 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void updateProveedor() {
 		System.out.println("Ingrese el ID del PROVEEDOR a modificar");
 		int idProveedorAModificar = scan.nextInt();
@@ -795,7 +795,7 @@ public class VistaConsola {
 		}
 		returnMenuAnterior();
 	}
-	
+
 	private void updateProducto() {
 		System.out.println("Ingrese el ID del producto a modificar");
 		int idProductoAModificar = scan.nextInt();
@@ -839,7 +839,7 @@ public class VistaConsola {
 		returnMenuAnterior();
 	}
 	//
-	
+
 	private void menuConsultas() {
 		int opcionMenuConsultas = -1;
 		while (opcionMenuConsultas != 0) {
@@ -866,7 +866,7 @@ public class VistaConsola {
 			}
 		}
 	}
-	
+
 	private void menuConsultasProveedor() {
 		int opcionMenuConsultasProveedor = -1;
 		while (opcionMenuConsultasProveedor != 0) {
@@ -1001,12 +1001,12 @@ public class VistaConsola {
 		int nroFactura = scan.nextInt();
 		Factura factura = gdb.selectFromFacturaWhere(nroFactura);
 		if (factura != null) {
-		List<Detalle> detalles = factura.getDetalles();
-		if (detalles.isEmpty())
-			System.out.println("La factura no contiene detalles");
-		else
-			for (Detalle detalle : detalles)
-				System.out.println(detalle.toString());
+			List<Detalle> detalles = factura.getDetalles();
+			if (detalles.isEmpty())
+				System.out.println("La factura no contiene detalles");
+			else
+				for (Detalle detalle : detalles)
+					System.out.println(detalle.toString());
 		} else
 			System.out.println("No existe una factura con dicho NRO");
 		returnMenuAnterior();
