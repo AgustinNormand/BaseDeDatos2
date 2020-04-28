@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.query.Query;
 
 public class Database {
 	private ObjectContainer db = null;
@@ -31,7 +32,9 @@ public class Database {
 	}
 	public ArrayList<Cliente> selectAllClientes() {
 		openDb();
-		ObjectSet listClientes = db.queryByExample(Cliente.class); 
+		Query query = db.query();
+		query.constrain(Cliente.class);
+		ObjectSet listClientes = query.execute();
 		ArrayList<Cliente> lc = new ArrayList<>();
 		for (Object cliente : listClientes) 
 			lc.add((Cliente) cliente);
@@ -98,5 +101,35 @@ public class Database {
 		if (!file.delete())
 			errorCode = 1;
 		return errorCode;
+	}
+	
+	public ArrayList<Cliente> selectFromClienteWhere(String descripcion) {
+		openDb();
+		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+		Query query = db.query();
+		query.constrain(Cliente.class);
+		query.descend("descr").constrain("b");
+		ObjectSet listClientes = query.execute();
+		for (Object cliente : listClientes) 
+			clientes.add((Cliente) cliente);
+		closeDb();
+		return clientes;
+	}
+	
+	public Factura selectFromFacturaWhere(int idFactura) {
+		Factura factura = null;
+		openDb();/*
+		Query query = db.query();
+		query.constrain(Factura.class);
+		query.descend("nro").constrain(idFactura);
+		ObjectSet resultado = query.execute();
+		factura = (Factura) resultado.get(0);
+		*/
+		Factura facturaModelo = new Factura();
+		facturaModelo.setImporte(idFactura);
+		ObjectSet resultado = db.queryByExample(facturaModelo);
+		factura = (Factura) resultado.get(0);
+		closeDb();
+		return factura;
 	}
 }

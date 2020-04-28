@@ -20,6 +20,7 @@ public class VistaConsola {
 			System.out.println("2) Insert");
 			System.out.println("3) Update");
 			System.out.println("4) Delete");
+			System.out.println("5) Consultas");
 			System.out.println("9) Drop Database");
 			System.out.println("0) Salir");
 			opcionMenuPrincipal = scan.nextInt();
@@ -37,12 +38,32 @@ public class VistaConsola {
 			case 4:
 				menuDelete();
 				break;
+			case 5:
+				menuConsultas();
+				break;
 			case 9:
 				dropDatabase();
 			}
 		}
 	}
 	
+	private void menuConsultas() {
+		int opcionMenuConsultas = -1;
+		while (opcionMenuConsultas != 0) {
+			System.out.println("1) Clientes segun descripcion");
+			System.out.println("0) Volver");
+			opcionMenuConsultas = scan.nextInt();
+			clearScreen();
+			switch (opcionMenuConsultas) {
+			case 1:
+				System.out.println(gdb.selectFromClienteWhere("b").toString());
+				break;
+			case 2:
+				break;
+			}
+		}
+	}
+
 	// SELECT
 	
 	private void menuSelect() {

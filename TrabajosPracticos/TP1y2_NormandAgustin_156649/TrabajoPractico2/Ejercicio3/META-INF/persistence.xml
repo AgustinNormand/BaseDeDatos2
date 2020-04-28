@@ -17,7 +17,7 @@
   <!--  -->
     <properties>
         <property name="javax.persistence.jdbc.driver" value="org.firebirdsql.jdbc.FBDriver" />
-        <property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql://localhost:3050//firebird/data/TP1.fdb?charSet=utf-8" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:firebirdsql://localhost:3050//var/lib/firebird/2.5/data/TP1.fdb"/>
         <property name="javax.persistence.jdbc.user" value="SYSDBA" />
         <property name="javax.persistence.jdbc.password" value="masterkey" />
          <property name="eclipselink.logging.level" value="OFF" />

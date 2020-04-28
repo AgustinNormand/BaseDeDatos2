@@ -71,6 +71,7 @@ public class Gestor {
 	}
 
 	public Factura selectFactura(int nroFactura) {
+		/*
 		boolean found = false;
 		int index = 0;
 		Factura factura = null;
@@ -83,6 +84,8 @@ public class Gestor {
 		if (!found) 
 			factura = null;
 		return factura;
+		*/
+		return db.selectFromFacturaWhere(nroFactura);
 	}
 
 	public ArrayList<Factura> selectAllFacturas(){
@@ -193,5 +196,9 @@ public class Gestor {
 			if (factura.getImporte() >= importe)
 				facturasReturn.add(new Factura(factura.getNro(),factura.getId(),factura.getImporte()));
 		return facturasReturn;
+	}
+	
+	public ArrayList<Cliente> selectFromClienteWhere(String descripcion){
+		return db.selectFromClienteWhere(descripcion);
 	}
 }

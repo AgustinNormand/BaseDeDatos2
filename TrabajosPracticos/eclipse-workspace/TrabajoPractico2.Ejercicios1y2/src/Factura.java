@@ -3,6 +3,9 @@ public class Factura {
 	private int nro;
 	private int id;
 	private double importe;
+	public Factura() {
+		
+	}
 	public Factura(int nro, int id, double importe) {
 		this.nro = nro;
 		this.id = id;
