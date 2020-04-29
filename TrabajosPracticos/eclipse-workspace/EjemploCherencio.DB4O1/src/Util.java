@@ -1,7 +1,10 @@
+import com.db4o.Db4oEmbedded;
+import com.db4o.ObjectContainer;
+import com.db4o.ObjectServer;
+import com.db4o.ObjectSet;
+import com.db4o.cs.Db4oClientServer;
+import com.db4o.query.Query;
 
-import com.db4o.*;
-import com.db4o.cs.*;
-import com.db4o.query.*;
 /**
  * Esta clase encapsula las operaciones para persistir a clientes 
  * dentro de b.d. db4o
