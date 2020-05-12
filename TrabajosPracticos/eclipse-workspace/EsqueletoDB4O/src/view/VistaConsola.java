@@ -1,10 +1,10 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.Cliente;
 import model.Database;
-import model.Factura;
 
 public class VistaConsola {
 
@@ -35,9 +35,22 @@ public class VistaConsola {
 
 			switch (opcion) {
 			case 1: {
+				Cliente cliuno = new Cliente(0,"PepeUno",10);
+				Cliente cliunoYMedio = new Cliente(1,"PepeUnoYMedio",10);
+				Cliente clidos = new Cliente(50,"PepeDos",10);
+				Cliente clitres = new Cliente(100,"PepeTres",10);
+				Cliente clicuatro = new Cliente(101,"PepeCuatro",10);
+				database.insert(cliuno);
+				database.insert(cliunoYMedio);
+				database.insert(clidos);
+				database.insert(clitres);
+				database.insert(clicuatro);
 				break;
 			}
 			case 2: {
+				ArrayList<Cliente> clientes = database.listar();
+				for (Cliente cliente : clientes)
+					System.out.println(cliente.toString());
 				break;
 
 			}

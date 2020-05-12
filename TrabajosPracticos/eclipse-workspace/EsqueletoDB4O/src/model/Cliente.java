@@ -2,37 +2,59 @@ package model;
 
 public class Cliente {
 	
-	private int id;
+	private int codigo;
 	
 	private String nombre;
 	
-	public Cliente() {
-		//this(0,"");
-	}
+	private double saldo;
 	
-	public Cliente(int id, String nombre) {
-		this.id = id;
+	public Cliente(int codigo, String nombre, double saldo) {
+		this.codigo = codigo;
 		this.nombre = nombre;
+		this.saldo = saldo;
 	}
 
-	public int getId() {
-		return id;
+
+
+	public int getCodigo() {
+		return codigo;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
 	}
+
+
 
 	public String getNombre() {
 		return nombre;
 	}
 
+
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
 
+
+
+	public double getSaldo() {
+		return saldo;
+	}
+
+
+
+	public void setSaldo(double saldo) {
+		this.saldo = saldo;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", nombre=" + nombre + "]";
+		return "Cliente [codigo=" + codigo + ", nombre=" + nombre + ", saldo=" + saldo + "]";
 	}
+
 }

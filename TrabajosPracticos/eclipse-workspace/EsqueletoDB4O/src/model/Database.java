@@ -1,4 +1,6 @@
 package model;
+import java.util.ArrayList;
+
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectServer;
@@ -20,6 +22,8 @@ public class Database {
         db.close(); 
     }
     
+
+ 
     /*
      * SI ES CON CLIENTE / SERVIDOR
      * 
@@ -68,11 +72,11 @@ public class Database {
      * */
     
     
-  /*
-    public void insert(Object obj) {
+  
+    public void insert(Cliente cliente) {
     	try {
-    		if (selectFirst(obj) == null) {
-        		db.store(obj);
+    		if (selectFirst(cliente) == null) {
+        		db.store(cliente);
         		db.commit();
         	}	
 		} catch (Exception e) {
@@ -80,22 +84,23 @@ public class Database {
 		}
     }
 
-    public ObjectSet<Object> find(Object obj){
-    	ObjectSet<Object> os = null;
+    public ObjectSet<Cliente> find(Cliente cliente){
+    	ObjectSet<Cliente> os = null;
     	try {
-			os = db.queryByExample(obj);
+			os = db.queryByExample(cliente);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
     	return os;
     }
  
+
     
 
-	public Object selectFirst(Object obj) {
-		Object objReturn = null;
+	public Cliente selectFirst(Cliente cliente) {
+		Cliente objReturn = null;
 		try {
-			ObjectSet<Object> os = find(obj);
+			ObjectSet<Cliente> os = find(cliente);
 			while (objReturn == null && os.hasNext()) 
 				objReturn = os.next();			
 		} catch (Exception e) {
@@ -103,8 +108,8 @@ public class Database {
 		}
 		return objReturn;
 	}
-*/
-    
+
+   
     /*
 	public void delete (Object obj) {
 		ObjectSet<Object> os = find(obj);
@@ -156,6 +161,22 @@ public class Database {
     	return stringReturn;
     }
     */
+    
+    public ArrayList<Cliente> listar(){
+ 	//ObjectContainer db = getDb();
+ 	ArrayList<Cliente> clientes = new ArrayList<>();
+ 	try {
+			Query query = db.query();
+			query.constrain(Cliente.class);
+			query.descend("codigo").constrain(0).greater().and(query.descend("codigo").constrain(101).smaller());
+			ObjectSet<Cliente> os = query.execute();
+			while (os.hasNext())
+				clientes.add(os.next());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+ 	return clientes;
+ }
     
     /*
      * LISTAR LOS OBJETOS CON QUE CONTENGAN UN VALOR MAYOR AL INDICADO EN UN ATRIBUTO.
