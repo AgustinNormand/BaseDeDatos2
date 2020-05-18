@@ -1,5 +1,0 @@
-gcc AccesoPostgresql.c -Wall -g -c -lpq -I/usr/include/postgresql/
-gcc AccesoMysql.c -Wall -g -c -L/usr/lib/mysql -lmysqlclient
-gcc ServidorSwitch.c -Wall -g -c
-gcc -Wall -g AccesoPostgresql.o AccesoMysql.o ServidorSwitch.o -o Servidor -
-L/usr/lib/mysql -lmysqlclient -lpq -I/usr/include/postgresql/

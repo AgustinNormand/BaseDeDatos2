@@ -1,0 +1,133 @@
+ServidorSwitch.c
+
+Linea 27
+struct sockaddr_in socketServidor, socketCliente;
+
+Aca define un Struct, (Registro) con los nombres socketServidor y socketCliente
+De tipo sockaddr_in, este registro contiene la siguiente estructura:
+
+struct sockaddr_in {
+    short            sin_family;   
+    // Familia de la direccion, Ej: AF_INET.
+    unsigned short   sin_port;     
+    // Puerto Ej: htons(6666)
+    struct in_addr   sin_addr;     
+    // Direccion ip
+    char             sin_zero[8];  
+    // 
+};
+
+Donde sin_addr es un struct con la siguiente estructura:
+
+struct in_addr {
+    unsigned long s_addr;  
+};
+
+Donde sin_port y sin_addr deben seguir la "Ordenación de Bytes para Redes"
+Y sin_zero es un padding para alcanzar la longitud de sockaddr.
+Que se establece con memset
+void *memset(void *str, int c, size_t n) es una funcion para estableccer en la direccion de memoria "str" el valor "c" en "n" bytes 
+
+
+Linea 30
+idSocketServidor = socket(AF_INET, SOCK_STREAM, 0);
+
+La funcion socket recibe como parametro:
+	Un dominio: AF_INET para IPv4 y AF_UNIX para los sockets internos del sistema, existen otras más....
+	Un type: TCP o UDP es decir SOCK_STREAM o SOCK_DGRAM.
+	Un protocol: Protocolo que utilizará el socket, 0 para "cualquiera".
+
+La funcion socket retorna un file descriptor (int) distinto a -1 si no ocurrió ningún error.
+
+Linea 33
+socketServidor.sin_port = htons(PuertoSerBD);
+htons() es una funcion que se utiliza para ordenar los bytes para almacenarlos internamente, "Ordenación de Bytes para Redes".
+PuertoSerBD es una constante definida en ServidorSwitch.h
+
+    htons() -> ``Nodo a variable corta de Red''
+
+    htonl() -> ``Nodo a variable larga de Red''
+
+    ntohs() -> ``Red a variable corta de Nodo''
+
+    ntohl() -> ``Red a variable larga de Nodo'' 
+
+Linea 34
+socketServidor.sin_addr.s_addr = inet_addr(IPSerBD);
+inet_addr() es una funcion que se utiliza para pasar una direccion ip a un entero largo sin signo.
+IpSerBD es una constante definida en ServidorSwitch.h
+
+Linea 35
+memset(socketServidor.sin_zero, 0, 8);
+Establece con memset el valor de s_sock.sin_zero en 0 en los 8 bytes.
+
+Sería equivalente a la funcion
+bzero(&(socketServidor.sin_zero),8); 
+
+Linea 37
+bind(idSocketServidor, (struct sockaddr * ) &socketServidor, lensock)
+
+Bind = "Asignarle un nombre a un socket"
+Asigna un puerto a un socket.
+
+La funcion bind recibe como parametro:
+	Un file descriptor (INT) que identifica al socket al cual se le debe asignar la direccion ip, el que devuelve Socket()
+	Un puntero a una estructura sockaddr que almacena la direccion ip a asignar.
+	Una longitud en bytes de a direccion apuntada por la estructura anterior.
+	
+Se utiliza (struct sockaddr * ) para castear el struct sockaddr_in a sockaddr, esto es posible porque in memory sockaddr_in is the same size as struct sockaddr y se puede castear de uno a otro sin problemas.
+
+Linea 38
+printf("Listen: %d\n", listen(idSocketServidor, 5));
+
+La funcion listen recibe como parametro:
+	Un file descriptor (INT) el que devuelve socket()
+	El numero de conexiones permitidas
+Luego de listen debe llamarse a la funcion accept para aceptar las conexiones entrantes.
+La funcion listen retorna -1 en caso de error.
+
+Linea 42
+idSocketCliente = accept(idSocketServidor, (struct sockaddr * ) & socketCliente, & lensock);
+
+La funcion accept recibe como parametro:
+	Un file descriptor(INT) el que devuelve socket()
+	Un puntero a una estructura sockaddr_in en la que se determina que nodo se está conectando y desde que puerto.
+	La longitud de la estructura que apunta el puntero anterior.
+	
+	
+Linea 43
+if (idSocketCliente != -1) o "Si la conexion fue aceptada correctamente"
+	
+Linea 44
+if (!fork()) o if(fork() == 0)
+
+La funcion fork() crea un proceso hijo que usa el mismo puntero de instrucciones, los mismos registros de cpu y tiene los mismos archivos abiertos que el padre.
+Si la funcion fork devuelve un valor negativo, la creacion del hijo no fue exitosa.
+Si devuelve un valor positivo, la creaccion fue exitosa pero se esta ejecutando actualmente desde el proceso padre.
+Si devuelve 0, la creacion fue exitosa y se esta ejecutando desde el proceso hijo.
+
+Por lo tanto, si fork() devuelve 0, realizo la consulta a la base de datos, y dejo que el proceso padre siga atendiendo otras consultas.
+
+Linea 49 
+nb1 = read(idSocketCliente, query, 1024);
+
+Read (int fd, void *buf, size_t count)
+
+La funcion reed intenta leer count bytes del file descriptor fd a un buffer cuyo offset es buf.
+
+La funcion read retorna la cantidad de bytes leidos, si no estan todos los bytes disponibles para leer, el socket va a esperar en estado bloqueado, hasta que todos los bytes esten disponibles, y recien ahi continua la ejecución del programa.
+El estado Blocking es el estado por defecto de los socket.
+
+Las funciones Write y Read se pueden usar en sockets, pero estas funciones funcionan para cualquier File Descriptor, por lo tanto son menos especificas que las funciones recv() y send()
+
+Linea 50
+
+query[nb1] = '\0';
+
+nb1 es la cantidad de bytes leidos del idSocketCliente, que fueron almacenados en la dirección de memoria apuntada por query.
+
+Lo que realiza la linea 50, es se posiciona al final de el arreglo cuyo offset es query, e agrega un '\0' al final.
+El caracter '\0' es el caracter nulo.
+Y un String en C, es un array de char que finaliza con el caracter '\0'.
+Es decir, la longitud de un string es la distancia desde el primer caracter hasta el '\0'.
+

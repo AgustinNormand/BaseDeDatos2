@@ -1,0 +1,6 @@
+{
+	"engineName" : "Postgre",
+	"databaseName" : "tapas",
+	"query" : "SELECT * FROM CLIENTE WHERE ID = 12;"
+}
+ý

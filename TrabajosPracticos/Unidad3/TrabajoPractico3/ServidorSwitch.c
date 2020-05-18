@@ -22,78 +22,99 @@
 
 #include "ServidorSwitch.h"
 
+#include <json-c/json.h>
+
+void parseJson(char buffer[], char engineNameString[], char databaseNameString[], char queryString[]);
 void ObtenerNombreBaseDatos(char query[], char databasename[]);
 int main(int argc, char * argv[]) {
-  struct sockaddr_in s_sock, c_sock;
-  int idsocks, idsockc;
+  struct sockaddr_in socketServidor, socketCliente;
+  int idSocketServidor, idSocketCliente;
   socklen_t lensock = sizeof(struct sockaddr_in);
-  idsocks = socket(AF_INET, SOCK_STREAM, 0);
-  printf("idsocks %d\n", idsocks);
-  s_sock.sin_family = AF_INET;
-  s_sock.sin_port = htons(PuertoSerBD);
-  s_sock.sin_addr.s_addr = inet_addr(IPSerBD);
-  memset(s_sock.sin_zero, 0, 8);
-  printf("bind %d\n", bind(idsocks, (struct sockaddr * ) & s_sock, lensock));
-  printf("listen %d\n", listen(idsocks, 5));
+  idSocketServidor = socket(AF_INET, SOCK_STREAM, 0);
+  printf("idSocketServidor: %d\n", idSocketServidor);
+  socketServidor.sin_family = AF_INET;
+  socketServidor.sin_port = htons(PuertoSerBD);
+  socketServidor.sin_addr.s_addr = inet_addr(IPSerBD);
+  memset(socketServidor.sin_zero, 0, 8);
+  
+  printf("Bind: %d\n", bind(idSocketServidor, (struct sockaddr * ) & socketServidor, lensock));
+  printf("Listen: %d\n", listen(idSocketServidor, 5));
+  
   while (1) {
-    printf("esperando conexion\n");
-    idsockc = accept(idsocks, (struct sockaddr * ) & c_sock, & lensock);
-    if (idsockc != -1) {
+    printf("Esperando Conexion ...\n");
+    idSocketCliente = accept(idSocketServidor, (struct sockaddr * ) & socketCliente, & lensock);
+    if (idSocketCliente != -1) {
       if (!fork()) {
+	      printf("Conexion aceptada desde el cliente\n");
+	      
+        char buffer[1024];
+        int cantidadBytesLeidos;
+        
+        cantidadBytesLeidos = read(idSocketCliente, buffer, 1024);
+       //buffer[cantidadBytesLeidos] = '\0';
+        
+        printf("Cantidad de bytes leidos: %d\n",cantidadBytesLeidos);
+        
+        char engineName[64];
+        char databaseName[64];
         char query[1024];
-        char databasename[1024];
-        int nb1;
-        printf("conexion aceptada desde el cliente\n");
-        nb1 = read(idsockc, query, 1024);
-        query[nb1] = '\0';
-        if (query[0] == 'm') {
-          ObtenerNombreBaseDatos(query, databasename);
-          printf(".......recibido del cliente %d : %s %s\n", idsockc, databasename, query);
-          char respuesta[1024];
-          memset(respuesta, 0, 1024);
-          funcionMysql(databasename, query, respuesta);
-          write(idsockc, respuesta, 1024);
-          Log(databasename, query);
+        
+        parseJson(buffer, engineName, databaseName, query);
+                
+        printf("EngineName: %s\n",engineName);
+        printf("DatabaseName: %s\n",databaseName);
+        printf("Query: %s\n",query);
+        
+        if (strcmp(engineName,"MySql") == 0) {
+        	printf("Query a MySql\n");
+        //  ObtenerNombreBaseDatos(query, databaseName);
+        //  printf(".......recibido del cliente %d : %s %s\n", idSocketCliente, databaseName, query);
+        //  char respuesta[1024];
+      //   memset(respuesta, 0, 1024);
+      //    funcionMysql(databaseName, query, respuesta);
+       //   write(idSocketCliente, respuesta, 1024);
+       //   Log(databaseName, query);
         }
-        if (query[0] == 'p') {
-          ObtenerNombreBaseDatos(query, databasename);
-          printf(".......recibido del cliente %d : %s %s\n", idsockc, databasename, query);
-          char respuesta[1024];
-          memset(respuesta, 0, 1024);
-          funcionPostgresql(databasename, query, respuesta);
-          write(idsockc, respuesta, 1024);
-          Log(databasename, query);
+				if (strcmp(engineName,"Postgresql") == 0) {
+					printf("Query a Postgresql\n");
+//          ObtenerNombreBaseDatos(query, databaseName);
+  //        printf("Peticion recibida\n");
+    //      printf("idSocketCliente: %d, databaseName: %s, query: %s\n", idSocketCliente, databaseName, query);
+      //    char respuesta[1024];
+        //  memset(respuesta, 0, 1024);
+//          funcionPostgresql(databaseName, query, respuesta);
+  //        write(idSocketCliente, respuesta, 1024);
+    //      Log(databaseName, query);
         }
         printf("conexion finalizada con el cliente\n");
-        close(idsockc);
+        close(idSocketCliente);
         exit(0);
       }
     } else {
-      printf("conexion rechazada %d \n", idsockc);
+      printf("conexion rechazada %d \n", idSocketCliente);
     }
   }
   return 0;
 }
-void ObtenerNombreBaseDatos(char query[], char databasename[]) {
-  char queryaux[1024];
-  int i;
-  for (i = 0; query[i] != ':'; i++);
-  int j, x = 0;
-  for (j = i + 1; i < strlen(query) && query[j] != ':'; j++) {
-    databasename[x] = query[j];
-    x++;
-  }
-  databasename[x] = '\0';
-  j++;
-  int p;
-  x = 0;
-  for (p = j; p < strlen(query) && query[p] != '\0'; p++) {
-    queryaux[x] = query[p];
-    x++;
-  }
-  queryaux[x] = '\0';
-  strcpy(query, queryaux);
+
+void parseJson(char buffer[], char engineNameString[], char databaseNameString[], char queryString[])
+{
+	struct json_object *parsed_json;
+	struct json_object *engineName;
+	struct json_object *databaseName;
+	struct json_object *query;
+				
+	parsed_json = json_tokener_parse(buffer);
+				
+	json_object_object_get_ex(parsed_json, "engineName", &engineName);
+	json_object_object_get_ex(parsed_json, "databaseName", &databaseName);
+	json_object_object_get_ex(parsed_json, "query", &query);
+	
+	strcpy(engineNameString, json_object_get_string(engineName));
+	strcpy(databaseNameString, json_object_get_string(databaseName));
+	strcpy(queryString, json_object_get_string(query));
 }
+
 void Log(char * db, char * sql) {
   char Fecha[128];
   char Hora[128];
