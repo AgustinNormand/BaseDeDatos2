@@ -1,0 +1,1 @@
+gcc -Wall -g Cliente.c -o Cliente -I/usr/include/libxml2 -lxml2

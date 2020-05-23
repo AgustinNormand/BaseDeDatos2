@@ -1,0 +1,15 @@
+MySql: DEB Package, Development Headers
+PostgreSql: sudo apt install libpq-dev
+Json: sudo apt install libjson-c-dev
+
+
+Firebird:
+Dependencias necesarias: sudo apt-get install libncurses5
+Descargar, y hacer sudo make de https://sourceforge.net/projects/libfb/files/latest/download
+Copiar el archivo /opt/firebird/lib/libfbclient.so a /usr/lib/
+Copiar la carpeta libfb a /usr/include
+
+Realizar los include con #include <libfb/libfb.h>
+
+libpq page: http://zetcode.com/db/postgresqlc/
+

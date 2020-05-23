@@ -1,0 +1,5 @@
+gcc AccesoPostgresql.c -Wall -g -c -lpq -I/usr/include/postgresql/
+gcc AccesoMysql.c -Wall -g -c 
+gcc AccesoFirebird.c -Wall -g -c -lfb
+gcc ServidorSwitch.c -c -Wall -lxml2 -I/usr/include/libxml2
+gcc -g AccesoPostgresql.o AccesoMysql.o AccesoFirebird.o ServidorSwitch.o -o Servidor -L/usr/include/mysql/ -l mysqlclient -lpq -I/usr/include/postgresql/ -ljson-c -Wall -lxml2 -I/usr/include/libxml2 -lfb

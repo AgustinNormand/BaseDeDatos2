@@ -1,0 +1,23 @@
+<query>
+	<cols>
+		<colname1>SCHEMA_NAME</colname1>
+	</cols>
+	<rows>
+		<row1>
+			<col1>mysql</col1>
+		</row1>
+		<row2>
+			<col1>information_schema</col1>
+		</row2>
+		<row3>
+			<col1>performance_schema</col1>
+		</row3>
+		<row4>
+			<col1>sys</col1>
+		</row4>
+		<row5>
+			<col1>MySqlDatabase</col1>
+		</row5>
+	</rows>
+</query>
+

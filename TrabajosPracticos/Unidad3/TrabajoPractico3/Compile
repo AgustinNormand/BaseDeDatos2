@@ -1,2 +1,0 @@
-gcc ServidorSwitch.c -c -Wall
-gcc -g AccesoPostgresql.o AccesoMysql.o ServidorSwitch.o -o Servidor -L/usr/include/mysql/ -l mysqlclient -lpq -I/usr/include/postgresql/ -ljson-c -Wall
