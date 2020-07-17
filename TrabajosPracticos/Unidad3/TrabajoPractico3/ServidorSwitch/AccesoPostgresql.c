@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include <libpq-fe.h> //Hay que descargarla
+#include <libpq-fe.h>
 
 #include <sys/types.h>
 

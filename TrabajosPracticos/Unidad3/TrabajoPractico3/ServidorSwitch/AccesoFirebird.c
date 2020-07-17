@@ -34,8 +34,6 @@ int queryAFirebird(char databaseName[], char bufferQuery[], char bufferRespuesta
     fb_init(&myQuery); 
 		if (fb_do_query(&dbinfo, 1, bufferQuery, onDoGenericQuery, &myQuery))
 		{
-	//		char **cols;
-			int row = 1;
 			printf("Cantidad de filas %d\n",myQuery.rows);
 			printf("Cantidad de columnas %d\n",myQuery.cols);
 			printf("Rows Inserted %d\n",myQuery.rows_inserted);
@@ -92,29 +90,6 @@ int queryAFirebird(char databaseName[], char bufferQuery[], char bufferRespuesta
 					strcat(bufferRespuesta,bufferAux);
 				}
 				strcat(bufferRespuesta,"\t</rows>\n");
-				/*
-				while (q)
-				{
-					printf("Itering\n");
-					sprintf(bufferAux,"<row%d>\n",row);
-					strcat(bufferRespuesta,bufferAux);
-
-					sprintf(bufferAux,"<col%d>\n",123);
-					strcat(bufferRespuesta,bufferAux);				
-					
-					cols = (char **) q-> col;
-					printf("%s || %s\n",*cols,*(cols+1));
-									
-					sprintf(bufferAux,"</col%d>\n",123);
-					strcat(bufferRespuesta,bufferAux);
-					
-					sprintf(bufferAux,"</row%d>\n",row);
-					strcat(bufferRespuesta,bufferAux);
-					row++;
-					
-					q = q-> next;
-				}
-				*/
 				fb_free(&myQuery);
 			}
 		}

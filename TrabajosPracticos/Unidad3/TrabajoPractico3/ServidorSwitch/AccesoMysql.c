@@ -22,35 +22,31 @@ void queryAMysql(char databaseName[], char query[], char bufferRespuesta[]) {
 	
 	char bufferAuxiliar[1024];
 
-  MYSQL * conn; // variable de conexión para MySQL
-  MYSQL_RES * result; // variable que contendra el resultado de la consuta
-  MYSQL_ROW row; // variable que contendra los campos por cada registro consultado
+  MYSQL * conn;
+  MYSQL_RES * result; 
+  MYSQL_ROW row; 
   char * server = IPMySql;
   char * user = UsernameMysql; 
   char * password = PasswordMysql; 
   char * database = databaseName; 
-  conn = mysql_init(NULL); //inicializacion
+  conn = mysql_init(NULL);
   
-  if (mysql_real_connect(conn, server, user, password, database, 0, NULL, 0) == NULL) { //Error
-  //strcpy(bufferRespuesta,"Fallo la conexión al servidor MySql.\n");
+  if (mysql_real_connect(conn, server, user, password, database, 0, NULL, 0) == NULL) {
   	printf("Fallo la conexión al servidor MySql.\n");
   	strcat(bufferRespuesta,"\t<status>\n");
    	strcat(bufferRespuesta,"\t<status1>Falló la conexión.</status1>\n");
    	strcat(bufferRespuesta,"\t</status>\n");
-    //sprintf(bufferRespuesta, "%s\n", mysql_error(conn));
   } else {
-	if (mysql_query(conn, query) != 0) { //Error
-		//strcpy(bufferRespuesta,"Falló la query al servidor MySql.\n");
+	if (mysql_query(conn, query) != 0) {
 		printf("Falló la query al servidor MySql.\n");
 		strcat(bufferRespuesta,"\t<status>\n");
    	strcat(bufferRespuesta,"\t<status1>Falló la query.</status1>\n");
    	strcat(bufferRespuesta,"\t</status>\n");
-      //sprintf(bufferRespuesta, "%s\n", mysql_error(conn));
     } 
     else 
 		{
 			result = mysql_use_result(conn);
-      if (result == NULL) //Puede no devolver nada la query, y eso no es un error
+      if (result == NULL)
       {
 	      strcat(bufferRespuesta,"\t<status>\n");
   	  	strcat(bufferRespuesta,"\t<status1>Ok query.</status1>\n");

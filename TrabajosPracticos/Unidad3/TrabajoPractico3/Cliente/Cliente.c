@@ -30,20 +30,9 @@ int main(int argcm, char * argv[]){
 	connectResult = connect(fdSocketCliente,(struct sockaddr *) & socketServidor, longitudSocket);
 	printf("Connect: %d\n", connectResult);
 	if (connectResult != -1){
-		//char engineName[64];
 		char databaseName[64];
 		char query[896];
 		char temp;
-		/*
-		printf("\nIngresar engineName {Postgresql o MySql o Firebird}\n");
-		scanf("%s",engineName);
-		upperCase(engineName);
-		while (validarEngineName(engineName) == 0){
-			printf("Ingresó un engineName erroneo, elija {Postgresql o MySql}\n");
-			scanf("%s",engineName);
-			upperCase(engineName);
-		}
-		*/
 		printf("\nIngresar databaseName\n");
 		scanf("%s",databaseName);
 		
@@ -53,13 +42,13 @@ int main(int argcm, char * argv[]){
 		scanf("%[^\n]",query);
 		while (strcmp(query,"0") != 0){
 			char respuesta[1024] = "";
-			queryALaBase(fdSocketCliente/*,engineName*/,databaseName,query,respuesta);
+			queryALaBase(fdSocketCliente,databaseName,query,respuesta);
 			parseRespuesta(respuesta);
 			printf("\nIngrese nueva query.\n");
 			scanf("%c",&temp); //Clear the buffer otherwise doesnt work.
 			scanf("%[^\n]",query);
 		}
-		cerrarConexionBase(fdSocketCliente/*,engineName*/,databaseName);
+		cerrarConexionBase(fdSocketCliente,databaseName);
 		close(fdSocketCliente);
 	}
 	
@@ -86,11 +75,9 @@ void upperCase(char string[64]){
 	}
 }
 
-void queryALaBase(int fdSocketCliente, /*char engineName[64],*/ char databaseName[64], char query[1024], char respuesta[1024]){
+void queryALaBase(int fdSocketCliente, char databaseName[64], char query[1024], char respuesta[1024]){
 	char buffer[1024];
 	memset(buffer,0,1024);
-	//strcat(buffer,"{\"engineName\" : \"");
-	//strcat(buffer,engineName);
 	strcat(buffer,"{\"databaseName\" : \"");
 	strcat(buffer,databaseName);
 	strcat(buffer,"\", \"query\" : \"");
@@ -107,11 +94,9 @@ void queryALaBase(int fdSocketCliente, /*char engineName[64],*/ char databaseNam
 	strcpy(respuesta,bufferRecibo);
 }
 
-void cerrarConexionBase(int fdSocketCliente, /*char engineName[64],*/ char databaseName[64]){
+void cerrarConexionBase(int fdSocketCliente, char databaseName[64]){
 	char buffer[1024];
 	memset(buffer,0,1024);
-	//strcat(buffer,"{\"engineName\" : \"");
-	//strcat(buffer,engineName);
 	strcat(buffer,"{\"databaseName\" : \"");
 	strcat(buffer,databaseName);
 	strcat(buffer,"\", \"query\" : \"0\"}");

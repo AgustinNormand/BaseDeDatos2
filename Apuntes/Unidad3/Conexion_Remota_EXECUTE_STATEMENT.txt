@@ -1,0 +1,300 @@
+
+Recordatorio Máquinas virtuales utilizadas:
+
+Windows 7_2      IP 192.168.1.40   Adaptador puente
+Debian3               IP 192.168.1.70   Adaptador puente
+Debian3_2           IP 192.168.1.80   Adaptador puente
+
+------------------------------------------
+
+Ejemplo 1 En Windows 7
+1) Crear en Windows 7 una base de datos llamada DB_ejemplo_execute_statement
+2) Crear el siguiente procedimiento en esta base de datos
+3) Cuando se ejecuta este procedimiento en Windows 7 se crea la tabla T2_deb3 en la misma base de datos pero en el servidor debian3
+-----------------------------------------------------
+SET TERM ^ ;
+create PROCEDURE CREARTABLA_T2_deb3
+AS
+declare lcComando varchar(512) ;
+BEGIN
+  lcComando = 'create table T2_deb3 ( 
+                  cod integer not null primary key, 
+                  nombre  varchar (32) not null);';
+   EXECUTE STATEMENT
+      :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL
+      '192.168.1.70/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS 
+      USER 'SYSDBA' PASSWORD 'masterkey' ;
+END^
+SET TERM ; ^
+
+GRANT EXECUTE  ON PROCEDURE CREARTABLA_T2_deb3
+TO  SYSDBA;
+-----------------------------------------------------
+execute procedure CREARTABLA_T2_deb3
+
+-----------------------------------------------------
+-----------------------------------------------------
+
+Ejemplo 2 En Windows 7
+Inserta una fila en debian 3 desde windows 7
+
+SET TERM ^ ;
+create PROCEDURE INSERTAR_SERVER_en_deb_t2_deb3(atcod integer, atnombre varchar(32))
+AS
+DECLARE VARIABLE lcComando VARCHAR(200);
+   BEGIN
+   
+  lcComando = 'INSERT INTO T2_deb3 (cod, nombre) VALUES(' ||
+:atcod || ',' || ASCII_CHAR(39) || :atnombre || ASCII_CHAR(39) || ')';
+   
+   EXECUTE STATEMENT :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL '192.168.1.70/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS USER 'SYSDBA' PASSWORD 'masterkey' ;
+END^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE INSERTAR_SERVER_en_deb_t2_deb3 to sysdba;
+
+--------------------------------------------------
+execute procedure INSERTAR_SERVER_en_deb_t2_deb3(400,'cuatrocientos');
+--------------------------------------------------
+--------------------------------------------------
+
+Ejemplo 3 ServerWin 7
+
+Crear la tabla en windows 7 
+create table T1_deb3
+( 
+    cod integer not null primary key, 
+    nombre  varchar (32) not null
+);
+
+ServerDeb3
+Crear la tabla en Debian3 
+create table T1_deb3
+( 
+    cod integer not null primary key, 
+    nombre  varchar (32) not null
+);
+-------------------------------------------------------------
+Insertar en Windows 7
+
+insert into t1_deb3 (cod,nombre) values (30,'treinta');
+insert into t1_deb3 (cod,nombre) values (31,'treinta uno');
+insert into t1_deb3 (cod,nombre) values (32,'treinta dos');
+insert into t1_deb3 (cod,nombre) values (33,'treinta tres');
+--------------------------------------------------------------
+
+En Windows 7 
+procedimiento que recorre la tabla T1_deb3 e inserta las filas en la tabla T1_deb3 en debian3
+
+
+SET TERM ^ ;
+create PROCEDURE COPIAR_CONTENIDO_DE_UNA_TABLA_1
+RETURNS ( ATCOD Integer, ATNOMBRE Varchar(32) )
+AS DECLARE VARIABLE lcComando VARCHAR(200);
+BEGIN
+   FOR SELECT COD , NOMBRE FROM T1_deb3 INTO :ATCOD , :ATNOMBRE
+   DO begin  
+     lcComando = 'INSERT INTO T1_deb3 (cod, nombre) VALUES(' ||
+            atcod || ',' || ASCII_CHAR(39) || atnombre || ASCII_CHAR(39) || ')';
+ 
+        EXECUTE STATEMENT :lcComando WITH COMMON TRANSACTION
+        ON EXTERNAL '192.168.1.70/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+AS 
+        USER 'SYSDBA' PASSWORD 'masterkey' ;
+        
+   suspend;
+   END 
+END^
+SET TERM ; ^
+
+GRANT EXECUTE
+ ON PROCEDURE COPIAR_CONTENIDO_DE_UNA_TABLA_1 TO  SYSDBA;
+
+----------------------------------------------------------
+En windows
+SELECT * FROM COPIAR_CONTENIDO_DE_UNA_TABLA_1;
+commit;
+-----------------------------------------------------------
+
+En debian
+select * from T1_DEB3
+--------------------------------------------------------------
+
+
+Ejemplo 4
+Cuando se borra una fila en windows la borramos  en debian3
+
+
+SET TERM ^ ;
+create TRIGGER TRG_AD_T1_deb3 for t1_deb3 ACTIVE AFTER DELETE POSITION 0
+AS 
+ declare lcComando varchar(132) ;
+ BEGIN 
+    lcComando = 'delete from T1_deb3  where COD = ' || OLD.COD   ;
+   EXECUTE STATEMENT :lcComando WITH AUTONOMOUS TRANSACTION
+   ON EXTERNAL '192.168.1.70/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS USER 'SYSDBA' PASSWORD 'masterkey' ;
+END^
+SET TERM ; ^
+------------------------------------------------------
+En windows
+delete from t1_deb3 where cod = 30 
+
+
+-----------------------------------------------------------
+
+Ejemplo 5
+En debian3 cuando se inserta una fila en debian3 también se inserta en windows 7
+
+SET TERM ^ ;
+create TRIGGER TRG_AI_t1_deb3 for t1_deb3 ACTIVE
+AFTER INSERT POSITION 0
+AS 
+ declare lcComando varchar(132) ;
+ declare atcod  integer  ;
+ declare atnombre  varchar(32)  ;
+BEGIN 
+    atcod   = NEW.COD ;
+    atnombre   = NEW.NOMBRE ;
+     lcComando = 'INSERT INTO T1_deb3(cod, nombre) VALUES(' ||
+               :atcod || ',' || ASCII_CHAR(39) || :atnombre || ASCII_CHAR(39) || ')';
+ 
+   EXECUTE STATEMENT
+      :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL
+      '192.168.1.40/3050:C:\Users\jromer\Documents\DB_ejemplo_execute_statement.fdb'
+   AS
+      USER 'SYSDBA' PASSWORD 'masterkey' ;
+END^
+SET TERM ; ^
+
+-----------------------------------------
+insert into t1_deb3 values (100,'cien');
+
+---------------------------------------------------
+
+Ejemplo 6
+En windows cuando se modifica una fila también se modifica en 
+debian3
+
+SET TERM ^ ;
+create TRIGGER TRG_AU_T1_deb3 for t1_deb3 ACTIVE
+AFTER UPDATE POSITION 0 
+AS 
+ declare lcComando varchar(132) ;
+ declare atcod  integer  ;
+ declare atnombre  varchar(32)  ;
+
+BEGIN 
+
+    atcod   = NEW.COD ;
+    atnombre   = NEW.NOMBRE ;
+
+    lcComando = 'update T1_deb3 set nombre = ' || ASCII_CHAR(39) || :atnombre || ASCII_CHAR(39) 
+               || ' where COD = ' || :atcod ;
+   EXECUTE STATEMENT
+      :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL
+      '192.168.1.70/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS
+      USER 'SYSDBA' PASSWORD 'masterkey';
+END^
+SET TERM ; ^
+---------------------------------------------
+En windows 
+update T1_DEB3 set nombre = 'cucucucuc' where cod = 40
+
+--------------------------------------------------------------
+
+----------------------------------------------
+
+Ejemplo 7 en windows 
+desde windows se crean tablas en abanico 
+se crea una tabla en debian3 y en debian3_2
+el nombre de la tabla se ingresa por parámetro
+
+SET TERM ^ ;
+create PROCEDURE crear_tabla_abanico(tabla varchar(32))
+AS
+declare lcComando varchar(512) ;
+BEGIN
+  lcComando = 'create table ' || :tabla || ' ( 
+                  cod integer not null primary key, 
+                  nombre  varchar (32) not null);';
+   EXECUTE STATEMENT
+      :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL
+'192.168.1.70/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS 
+      USER 'SYSDBA' PASSWORD 'masterkey' ;
+EXECUTE STATEMENT
+      :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL
+'192.168.1.80/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS 
+      USER 'SYSDBA' PASSWORD 'masterkey' ;
+END^
+SET TERM ; ^
+---------------------------------------------
+GRANT EXECUTE
+ ON PROCEDURE crear_tabla_abanico TO  SYSDBA;
+---------------------------------------------
+execute procedure crear_tabla_abanico('personas');
+
+------------------------------------------------------------
+Ejemplo 8 en cadena
+
+En windows pone en ejecución un store procedure en debian3 que crea la tabla en debian3_2 
+
+SET TERM ^ ;
+create PROCEDURE crear_tabla_diferida(tabla varchar(32))
+AS
+declare lcComando varchar(512) ;
+BEGIN
+  lcComando = 'execute procedure crear_tabla('''||:tabla||''');';
+      
+EXECUTE STATEMENT
+      :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL
+   '192.168.1.70/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS 
+      USER 'SYSDBA' PASSWORD 'masterkey' ;
+
+
+END^
+SET TERM ; ^
+---------------------------------------------
+GRANT EXECUTE
+ ON PROCEDURE crear_tabla_diferida TO  SYSDBA;
+--------------------------------------------------
+Store procedure en debian3 (intermedio)
+
+SET TERM ^ ;
+CREATE PROCEDURE CREAR_TABLA (
+    TABLA Varchar(32) )
+AS
+declare lcComando varchar(512) ;
+BEGIN
+  lcComando = 'create table ' || :tabla || ' ( 
+                  cod integer not null primary key, 
+                  nombre  varchar (32) not null);';
+   EXECUTE STATEMENT
+      :lcComando WITH COMMON TRANSACTION
+   ON EXTERNAL
+      '192.168.1.80/3050:/var/lib/firebird/2.5/data/DB_ejemplo_execute_statement'
+   AS 
+      USER 'SYSDBA' PASSWORD 'masterkey' ;
+END^
+SET TERM ; ^
+
+---------------------------------------------
+En windows
+execute procedure crear_tabla_diferida('productos');
+----------------------------------------------
+
+ 

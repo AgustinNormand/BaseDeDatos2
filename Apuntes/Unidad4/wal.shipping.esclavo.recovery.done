@@ -1,0 +1,19 @@
+standby_mode = 'on'
+
+# Specifies a connection string which is used for the standby server to connect
+# with the primary.
+primary_conninfo = 'host=192.168.1.34 port=5432 user=postgres'
+
+# Specifies a trigger file whose presence should cause streaming replication to
+# end (i.e., failover).
+trigger_file = '/tmp/postgres-failover.trigger'
+
+# Specifies a command to load archive segments from the WAL archive. If
+# wal_keep_segments is a high enough number to retain the WAL segments
+# required for the standby server, this may not be necessary. But
+# a large workload can cause segments to be recycled before the standby
+# is fully synchronized, requiring you to start again from a new base backup.
+restore_command = 'cp /var/lib/postgresql/wal_archive/%f \"%p\"'
+
+archive_cleanup_command = '/usr/lib/postgresql/9.1/bin/pg_archivecleanup /var/lib/postgresql/wal_archive/ %r'
+
